@@ -22,24 +22,65 @@
   <div class="container lock-box">
     <div class="card">
       <div class="kicker"><span class="dot"></span> Access Status: Locked</div>
-      <h1>Entry Gate</h1>
-      <p>ISL is intentionally small. Access is granted only to people who are ready to execute.</p>
+      <h1>ISL-90 Entry Gate</h1>
 
-      <div id="gateMsg" class="notice">Enter your access key to continue.</div>
-
-      <form id="gateForm" style="margin-top:12px;display:grid;gap:10px">
-        <input id="accessKey" class="input mono" placeholder="Enter Access Key" autocomplete="off" />
-        <button class="btn" type="submit">Enter</button>
-        <a class="btn secondary" href="sprint.html">See the 7-Day Sprint</a>
-      </form>
+      <p>
+        Income Stack Lab (ISL-90) is a commitment-based execution program.
+        Access is granted only after payment verification and manual approval.
+      </p>
 
       <hr class="sep" />
+
+      <h3>Step 1 — Pay Commitment Fee</h3>
+      <p>
+        Pay the <b>₦5,000 commitment fee</b>.
+        After payment, copy your <b>Paystack Payment Reference</b>.
+      </p>
+
+      <a class="btn" href="https://paystack.com/pay/isl90" target="_blank">
+        Pay ₦5,000 via Paystack
+      </a>
+
+      <hr class="sep" />
+
+      <h3>Step 2 — Request Access</h3>
+      <p>
+        Complete the access request form and submit your
+        <b>Paystack Payment Reference</b>.
+      </p>
+
+      <a class="btn secondary" 
+         href="https://forms.gle/D28mcCXxn8HJDGta8" 
+         target="_blank">
+        Submit Access Request
+      </a>
+
+      <hr class="sep" />
+
+      <h3>Step 3 — Enter Access Key</h3>
+      <p>
+        Once approved, you will receive an <b>Access Key</b>.
+        Enter it below to proceed.
+      </p>
+
+      <div id="gateMsg" class="notice">
+        Access keys are issued only after verification.
+      </div>
+
+      <form id="gateForm" style="margin-top:12px;display:grid;gap:10px">
+        <input id="accessKey" class="input mono"
+               placeholder="Enter Access Key"
+               autocomplete="off" />
+        <button class="btn" type="submit">Enter ISL-90</button>
+      </form>
+
       <small>
-        Tip: Key is case-sensitive. If you completed the sprint and need access, contact support.
+        ⚠️ Requests without valid payment reference will not be approved.
       </small>
     </div>
   </div>
 </section>
+
 
 <script src="assets/js/app.js"></script>
 </body>
