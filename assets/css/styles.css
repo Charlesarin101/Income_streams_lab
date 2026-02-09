@@ -117,3 +117,30 @@ hr.sep{border:0;border-top:1px solid var(--line);margin:16px 0}
 .notice.ok{border-color:rgba(34,197,94,.45)}
 .notice.err{border-color:rgba(251,113,133,.45);color:#FCA5A5}
 .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace}
+/* Gate header logo */
+.gate-head{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  text-align:center;
+  gap:10px;
+  margin-bottom:10px;
+}
+.gate-logo{
+  width:88px;
+  height:88px;
+  border-radius:999px;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.02);
+  padding:6px;
+  box-shadow: var(--shadow);
+  object-fit:contain;
+}
+.step{
+  padding:12px 14px;
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:rgba(255,255,255,.03);
+}
+.step b{color:var(--text)}
+.step small{display:block;margin-top:6px}
