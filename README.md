@@ -70,6 +70,25 @@ If you need real security later:
 - Or use private links + membership tools
 
 ---
+README — ISL Lab Deployment Notes
+
+1) Replace payment link:
+- In index.html and isl-90.html, replace PAYSTACK_PAYMENT_URL with your actual Paystack payment page URL.
+  (The pk_live_... value is a Paystack public key, not a checkout URL.)
+
+2) Logo:
+- Place your logo at: assets/img/isl-logo.png
+
+3) Lab Log:
+- Update lab-log.html:
+  - Replace the offer line with your real offer.
+  - Add the real launch date/time.
+  - Fill Week 1/2/3 entries as data arrives.
+
+Deploy:
+- Push files to GitHub Pages repo root.
+- Settings → Pages → Deploy from main branch.
+
 
 ## Customization Checklist
 To customize content quickly:
