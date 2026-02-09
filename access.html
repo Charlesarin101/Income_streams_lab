@@ -3,13 +3,20 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Access — Income Stack Lab</title>
+  <title>Access Gate — Income Stack Lab (ISL-90)</title>
   <link rel="stylesheet" href="assets/css/styles.css" />
 </head>
 <body>
+
 <header class="nav">
   <div class="container nav-inner">
-    <a class="brand" href="index.html"><span class="mark"></span><div><b>INCOME STACK LAB</b><br><small class="mono">Access Gate</small></div></a>
+    <a class="brand" href="index.html">
+      <span class="mark" aria-hidden="true"></span>
+      <div>
+        <b>INCOME STACK LAB</b><br />
+        <small class="mono">ISL-90 • Access Gate</small>
+      </div>
+    </a>
     <nav class="nav-links">
       <a class="chip" href="charter.html">The Charter</a>
       <a class="chip" href="sprint.html">7-Day Sprint</a>
@@ -21,67 +28,100 @@
 <section class="lock">
   <div class="container lock-box">
     <div class="card">
-      <div class="kicker"><span class="dot"></span> Access Status: Locked</div>
-      <h1>ISL-90 Entry Gate</h1>
 
-      <p>
-        Income Stack Lab (ISL-90) is a commitment-based execution program.
-        Access is granted only after payment verification and manual approval.
-      </p>
-
-      <hr class="sep" />
-
-      <h3>Step 1 — Pay Commitment Fee</h3>
-      <p>
-        Pay the <b>₦5,000 commitment fee</b>.
-        After payment, copy your <b>Paystack Payment Reference</b>.
-      </p>
-
-      <a class="btn" href="https://pk_live_8ead925ed63803c7f10dc2795a062c33fbc16318" target="_blank">
-        Pay ₦5,000 via Paystack
-      </a>
-
-      <hr class="sep" />
-
-      <h3>Step 2 — Request Access</h3>
-      <p>
-        Complete the access request form and submit your
-        <b>Paystack Payment Reference</b>.
-      </p>
-
-      <a class="btn secondary" 
-         href="https://forms.gle/D28mcCXxn8HJDGta8" 
-         target="_blank">
-        Submit Access Request
-      </a>
-
-      <hr class="sep" />
-
-      <h3>Step 3 — Enter Access Key</h3>
-      <p>
-        Once approved, you will receive an <b>Access Key</b>.
-        Enter it below to proceed.
-      </p>
-
-      <div id="gateMsg" class="notice">
-        Access keys are issued only after verification.
+      <!-- Logo + Title -->
+      <div class="gate-head">
+        <img class="gate-logo" src="assets/img/isl-logo.png" alt="Income Stack Lab Logo" />
+        <div class="kicker"><span class="dot"></span> Verification Required • Builders Only</div>
+        <h1 style="margin:6px 0 0;">ISL-90 Entry Gate</h1>
+        <p style="margin:6px 0 0;max-width:520px;">
+          Access is granted only after payment verification and review.
+          This is a commitment-based execution program — not a public course.
+        </p>
       </div>
 
-      <form id="gateForm" style="margin-top:12px;display:grid;gap:10px">
-        <input id="accessKey" class="input mono"
-               placeholder="Enter Access Key"
-               autocomplete="off" />
-        <button class="btn" type="submit">Enter ISL-90</button>
-      </form>
+      <hr class="sep" />
 
-      <small>
-        ⚠️ Requests without valid payment reference will not be approved.
-      </small>
+      <!-- Step 1: Pay -->
+      <div class="step">
+        <b>Step 1 — Pay the ₦5,000 Commitment Fee</b>
+        <small>
+          Pay first. After payment, copy your <b>Paystack Payment Reference</b>.
+          You will need it to submit the access request.
+        </small>
+
+        <!-- IMPORTANT: Replace PAYSTACK_PAYMENT_URL with your actual Paystack payment page URL -->
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
+          <a class="btn" id="payBtn" href="PAYSTACK_PAYMENT_URL" target="_blank" rel="noopener">
+            Pay ₦5,000 via Paystack
+          </a>
+          <a class="btn secondary" href="sprint.html">
+            Read Sprint Rules
+          </a>
+        </div>
+
+        <small class="mono" style="margin-top:10px;display:block;">
+          Paystack Public Key (for your records): pk_live_8ead925ed63803c7f10dc2795a062c33fbc16318
+        </small>
+      </div>
+
+      <hr class="sep" />
+
+      <!-- Step 2: Form -->
+      <div class="step">
+        <b>Step 2 — Submit Access Request (Google Form)</b>
+        <small>
+          Complete the form with your details and your Paystack payment reference number.
+          Requests without a valid reference will not be processed.
+        </small>
+
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
+          <a class="btn secondary" href="https://forms.gle/D28mcCXxn8HJDGta8" target="_blank" rel="noopener">
+            Submit Access Request Form
+          </a>
+        </div>
+      </div>
+
+      <hr class="sep" />
+
+      <!-- Step 3: Key -->
+      <div class="step">
+        <b>Step 3 — Enter Your Access Key</b>
+        <small>
+          After manual verification, you will receive an access key privately.
+          Enter it below to unlock ISL-90.
+        </small>
+
+        <div id="gateMsg" class="notice" style="margin-top:10px;">
+          Waiting for your access key.
+        </div>
+
+        <form id="gateForm" style="margin-top:12px;display:grid;gap:10px">
+          <input id="accessKey" class="input mono" placeholder="Enter Access Key" autocomplete="off" />
+          <button class="btn" type="submit">Enter ISL-90</button>
+        </form>
+
+        <small style="display:block;margin-top:10px;">
+          If you have paid and submitted the form, wait for approval.
+          Keys are issued after verification.
+        </small>
+      </div>
+
     </div>
   </div>
 </section>
 
-
 <script src="assets/js/app.js"></script>
+
+<script>
+  // Safety: if you forgot to replace the placeholder, hide the pay button to avoid confusion.
+  (function(){
+    const btn = document.getElementById("payBtn");
+    if(btn && btn.getAttribute("href") === "PAYSTACK_PAYMENT_URL"){
+      btn.style.display = "none";
+    }
+  })();
+</script>
+
 </body>
 </html>
