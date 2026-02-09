@@ -3,50 +3,71 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>ISL-90 Access Gate — Income Stack Lab</title>
+  <title>ISL-90 Gate — Income Stack Lab</title>
 
   <style>
     :root{
-      --bg:#070A0F;
-      --panel:#0C111B;
-      --text:#E9EEF7;
-      --muted:#A9B6CC;
-      --line:rgba(255,255,255,.12);
-      --accent:#22C55E;
-      --gold:#D4AF37;
+      /* Brighter, cleaner palette (still ISL) */
+      --bg:#06101F;              /* brighter navy */
+      --panel:#0B1B33;           /* lighter panel */
+      --text:#F2F6FF;
+      --muted:#B8C7E6;
+      --line:rgba(255,255,255,.14);
+      --accent:#39E07B;          /* brighter green */
+      --gold:#FFD36A;            /* brighter gold */
       --radius:18px;
       --shadow:0 18px 40px rgba(0,0,0,.45);
-      --max:900px;
+      --max:980px;
     }
     *{box-sizing:border-box}
     body{
       margin:0;
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
-      background:var(--bg);
+      background:
+        radial-gradient(900px 420px at 18% 0%, rgba(57,224,123,.20), transparent 55%),
+        radial-gradient(760px 360px at 85% 10%, rgba(255,211,106,.14), transparent 60%),
+        var(--bg);
       color:var(--text);
       line-height:1.6;
     }
     a{color:inherit;text-decoration:none}
-    .wrap{max-width:var(--max);margin:0 auto;padding:28px 18px}
+    .wrap{max-width:var(--max);margin:0 auto;padding:26px 16px}
+    .nav{
+      display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;
+      padding:14px 0;border-bottom:1px solid var(--line);
+      background:rgba(6,16,31,.70);backdrop-filter: blur(10px);
+      position:sticky;top:0;z-index:10;
+    }
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{
+      width:44px;height:44px;border-radius:999px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.04);
+      padding:4px;object-fit:contain;
+      box-shadow:var(--shadow);
+    }
+    .chip{
+      padding:10px 12px;border:1px solid var(--line);
+      border-radius:999px;color:var(--muted);font-size:14px;
+      background:rgba(255,255,255,.03);
+    }
+    .chip:hover{border-color:rgba(57,224,123,.55);color:var(--text)}
     .card{
-      background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+      margin-top:18px;
+      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
       border:1px solid var(--line);
       border-radius:var(--radius);
       box-shadow:var(--shadow);
-      padding:22px;
+      padding:20px;
     }
-    .center{text-align:center}
-    .logo{
-      width:96px;height:96px;
-      border-radius:999px;
-      border:1px solid var(--line);
-      padding:6px;
-      background:rgba(255,255,255,.02);
-      box-shadow:var(--shadow);
-      object-fit:contain;
-      margin-bottom:10px;
+    .kicker{
+      display:inline-flex;align-items:center;gap:10px;
+      padding:8px 12px;border:1px solid var(--line);
+      border-radius:999px;background:rgba(255,255,255,.03);
+      color:var(--muted);font-size:13px;
     }
-    h1{margin:10px 0 6px;font-size:28px}
+    .dot{width:8px;height:8px;border-radius:999px;background:var(--accent);box-shadow:0 0 0 6px rgba(57,224,123,.12)}
+    h1{margin:12px 0 8px;font-size:30px;line-height:1.15}
     p{margin:0 0 12px;color:var(--muted)}
     .grid{display:grid;gap:14px}
     .two{grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -59,32 +80,27 @@
     }
     .step h3{margin:0 0 6px}
     .btn{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      padding:12px 16px;
-      border-radius:999px;
-      border:1px solid rgba(34,197,94,.45);
-      background:rgba(34,197,94,.14);
+      display:inline-flex;align-items:center;justify-content:center;
+      width:100%;
+      padding:12px 14px;border-radius:999px;
+      border:1px solid rgba(57,224,123,.55);
+      background:rgba(57,224,123,.16);
       font-weight:800;
       margin-top:10px;
-      width:100%;
     }
-    .btn:hover{background:rgba(34,197,94,.2)}
+    .btn:hover{background:rgba(57,224,123,.22)}
     .btn.secondary{
       border:1px solid var(--line);
-      background:transparent;
-      font-weight:700;
+      background:rgba(255,255,255,.02);
+      font-weight:750;
     }
-    .btn.secondary:hover{border-color:rgba(212,175,55,.35)}
+    .btn.secondary:hover{border-color:rgba(255,211,106,.45)}
     .notice{
-      border:1px solid rgba(212,175,55,.35);
-      background:rgba(212,175,55,.06);
-      padding:14px;
-      border-radius:14px;
-      margin-top:16px;
-      font-size:14px;
+      border:1px solid rgba(255,211,106,.40);
+      background:rgba(255,211,106,.07);
+      padding:14px;border-radius:14px;
       color:var(--muted);
+      margin-top:14px;
     }
     .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;}
     .embedWrap{
@@ -93,6 +109,7 @@
       border:1px solid var(--line);
       border-radius:14px;
       overflow:hidden;
+      background:rgba(255,255,255,.02);
     }
     iframe{width:100%;border:0}
     small{color:var(--muted)}
@@ -100,89 +117,95 @@
 </head>
 
 <body>
-<div class="wrap">
-  <div class="card">
-
-    <div class="center">
-      <img src="assets/img/isl-logo.png" alt="Income Stack Lab Logo" class="logo">
-      <h1>ISL-90 Access Gate</h1>
-      <p>
-        This is a commitment-based execution lab.<br>
-        Access is granted only after payment verification and review.
-      </p>
-    </div>
-
-    <div class="grid two" style="margin-top:10px;">
-
-      <!-- STEP 1: PAYMENT -->
-      <div class="step">
-        <h3>Step 1 — Pay ₦5,000</h3>
-        <p>
-          Pay the commitment fee, then copy your <b>Paystack payment reference</b>.
-        </p>
-
-        <!-- ✅ CORRECT PAYSTACK LINK -->
-        <a class="btn" href="https://paystack.shop/pay/3oak86j2sf" target="_blank" rel="noopener">
-          Pay ₦5,000 via Paystack
-        </a>
-
-        <small class="mono" style="display:block;margin-top:10px;">
-          If you see “Page Not Found”, the link is wrong — copy the exact URL from Paystack.
-        </small>
+  <div class="wrap nav">
+    <a class="brand" href="index.html">
+      <img class="logo" src="assets/img/isl-logo.png" alt="ISL Logo">
+      <div>
+        <b>INCOME STACK LAB</b><br>
+        <small class="mono" style="color:var(--muted);">ISL-90 • ACCESS GATE</small>
       </div>
+    </a>
 
-      <!-- STEP 2: REQUEST ACCESS -->
-      <div class="step">
-        <h3>Step 2 — Request Access</h3>
-        <p>
-          After payment, submit your biodata + Paystack reference number.
-        </p>
-
-        <!-- Option A: Open form in a new tab -->
-        <a class="btn secondary" href="https://forms.gle/D28mcCXxn8HJDGta8" target="_blank" rel="noopener">
-          Request Access (Open Form)
-        </a>
-
-        <!-- Option B: Reveal embedded form on click (no new tab) -->
-        <button class="btn secondary" id="showEmbedBtn" type="button">
-          Request Access (Show Form Here)
-        </button>
-
-        <small style="display:block;margin-top:10px;">
-          Requests without a valid payment reference will not be approved.
-        </small>
-      </div>
-
+    <!-- Optional top links -->
+    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+      <a class="chip" href="isl-90.html">ISL-90 Protocol</a>
+      <a class="chip" href="lab-log.html">Lab Log</a>
     </div>
-
-    <!-- Embedded form is hidden until button click -->
-    <div class="embedWrap" id="embedWrap">
-      <iframe
-        src="https://docs.google.com/forms/d/e/1FAIpQLScChbYbX8WACMcNTiP5Q37_AZhuWN43D25rFSbJw1csOwlP_A/viewform?embedded=true"
-        height="1200"
-        marginheight="0"
-        marginwidth="0">
-        Loading…
-      </iframe>
-    </div>
-
-    <div class="notice">
-      <b>Step 3 — Manual Verification</b><br><br>
-      After you pay and submit the request, your details will be reviewed.
-      If approved, you will receive your <b>Access Key</b> privately.
-    </div>
-
   </div>
-</div>
 
-<script>
-  const btn = document.getElementById("showEmbedBtn");
-  const wrap = document.getElementById("embedWrap");
-  btn.addEventListener("click", () => {
-    wrap.style.display = "block";
-    wrap.scrollIntoView({behavior:"smooth", block:"start"});
-  });
-</script>
+  <div class="wrap">
+    <div class="card">
+      <div class="kicker"><span class="dot"></span> Proof before payment • Execution only</div>
+      <h1>Request Access to ISL-90</h1>
+      <p>
+        This is a lab where income streams are tested and proven. Entry is gated to protect seriousness.
+        Pay ₦5,000, submit your access request with the payment reference, then wait for manual approval.
+      </p>
 
+      <div class="grid two" style="margin-top:10px;">
+
+        <!-- Step 1 -->
+        <div class="step">
+          <h3>Step 1 — Pay ₦5,000 Commitment</h3>
+          <p>After payment, copy your <b>Paystack reference</b>. You will submit it in the request form.</p>
+
+          <!-- ✅ Correct Paystack link -->
+          <a class="btn" href="https://paystack.shop/pay/3oak86j2sf" target="_blank" rel="noopener">
+            Pay ₦5,000 via Paystack
+          </a>
+
+          <small class="mono" style="display:block;margin-top:10px;">
+            If Paystack shows “Page Not Found”, the URL is wrong. Use the exact link above.
+          </small>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="step">
+          <h3>Step 2 — Request Access (Google Form)</h3>
+          <p>Submit your biodata + the Paystack payment reference number.</p>
+
+          <!-- Option A: open in new tab -->
+          <a class="btn secondary" href="https://forms.gle/D28mcCXxn8HJDGta8" target="_blank" rel="noopener">
+            Open Access Request Form
+          </a>
+
+          <!-- Option B: reveal embedded form like AGEx "Open Form Here" -->
+          <button class="btn secondary" id="showEmbedBtn" type="button">
+            Open Form Here
+          </button>
+
+          <small style="display:block;margin-top:10px;">
+            Requests without a valid payment reference will not be approved.
+          </small>
+        </div>
+
+      </div>
+
+      <!-- Embedded form hidden until user clicks -->
+      <div class="embedWrap" id="embedWrap">
+        <iframe
+          src="https://docs.google.com/forms/d/e/1FAIpQLScChbYbX8WACMcNTiP5Q37_AZhuWN43D25rFSbJw1csOwlP_A/viewform?embedded=true"
+          height="1200"
+          frameborder="0"
+          marginheight="0"
+          marginwidth="0">Loading…</iframe>
+      </div>
+
+      <div class="notice">
+        <b>Step 3 — Manual Verification</b><br><br>
+        After you pay and submit the form, your request is reviewed manually.
+        If approved, you will receive an <b>Access Key</b> privately.
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const btn = document.getElementById("showEmbedBtn");
+    const wrap = document.getElementById("embedWrap");
+    btn.addEventListener("click", () => {
+      wrap.style.display = "block";
+      wrap.scrollIntoView({behavior:"smooth", block:"start"});
+    });
+  </script>
 </body>
 </html>
