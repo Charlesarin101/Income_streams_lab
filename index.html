@@ -1,429 +1,190 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Income Stack Lab — ISL-90</title>
-  <meta name="description" content="Income Stack Lab (ISL-90) is an execution cohort. Pay commitment → Submit access request → Receive key → Enter the lab. Proof before payment."/>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Income Stack Lab — The Execution Ground</title>
+<meta name="description" content="Income Stack Lab is a 90-day execution cohort. Proof before payment. Output over theory. Builders only."/>
 
-  <style>
-    :root{
-      --bg:#070A0F;
-      --panel:#0C111B;
-      --text:#E9EEF7;
-      --muted:#A9B6CC;
-      --line:rgba(255,255,255,.12);
-      --accent:#22C55E;
-      --gold:#D4AF37;
-      --ash:#98A2B3;
-      --danger:#FB7185;
-      --radius:18px;
-      --shadow: 0 18px 40px rgba(0,0,0,.45);
-      --max:1080px;
-    }
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
-      background:var(--bg);
-      color:var(--text);
-      line-height:1.6;
-    }
-    a{color:inherit;text-decoration:none}
-    .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;}
-    .wrap{max-width:var(--max);margin:0 auto;padding:26px 18px}
+<style>
+:root{
+  --bg:#070A0F;
+  --panel:#0C111B;
+  --text:#E9EEF7;
+  --muted:#A9B6CC;
+  --line:rgba(255,255,255,.12);
+  --accent:#22C55E;
+  --gold:#D4AF37;
+  --danger:#FB7185;
+  --radius:18px;
+  --max:1080px;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
+  background:var(--bg);
+  color:var(--text);
+  line-height:1.6;
+}
+.wrap{max-width:var(--max);margin:0 auto;padding:28px 18px}
+a{text-decoration:none;color:inherit}
 
-    header{
-      position:sticky; top:0; z-index:30;
-      background:rgba(7,10,15,.78);
-      backdrop-filter: blur(10px);
-      border-bottom:1px solid var(--line);
-    }
-    .nav{display:flex;align-items:center;justify-content:space-between;gap:14px}
-    .brand{display:flex;align-items:center;gap:12px;min-width:240px}
-    .logo{
-      width:44px;height:44px;border-radius:999px;
-      border:1px solid var(--line);
-      background:rgba(255,255,255,.02);
-      padding:4px;
-      object-fit:contain;
-      box-shadow:var(--shadow);
-    }
-    .brand b{letter-spacing:.6px}
-    .links{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
-    .chip{
-      padding:10px 12px;
-      border:1px solid var(--line);
-      border-radius:999px;
-      color:var(--muted);
-      font-size:14px;
-    }
-    .chip:hover{border-color:rgba(34,197,94,.45);color:var(--text)}
+header{
+  border-bottom:1px solid var(--line);
+  background:rgba(7,10,15,.85);
+}
+.nav{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.brand b{letter-spacing:.5px}
+.chip{
+  padding:8px 12px;
+  border:1px solid var(--line);
+  border-radius:999px;
+  font-size:14px;
+  color:var(--muted);
+}
+.hero{
+  padding:60px 0 20px;
+  border-bottom:1px solid var(--line);
+}
+.kicker{
+  display:inline-flex;
+  gap:10px;
+  padding:8px 12px;
+  border-radius:999px;
+  border:1px solid var(--line);
+  color:var(--muted);
+  font-size:13px;
+}
+h1{margin:16px 0 10px;font-size:42px}
+@media(max-width:640px){h1{font-size:34px}}
+.lead{color:var(--muted);max-width:860px}
 
-    .hero{
-      padding:54px 0 22px;
-      background:
-        radial-gradient(860px 380px at 18% 0%, rgba(34,197,94,.18), transparent 55%),
-        radial-gradient(760px 360px at 85% 12%, rgba(212,175,55,.14), transparent 60%);
-      border-bottom:1px solid var(--line);
-    }
-    .kicker{
-      display:inline-flex;align-items:center;gap:10px;
-      padding:8px 12px;border:1px solid var(--line);
-      border-radius:999px;background:rgba(255,255,255,.03);
-      color:var(--muted);font-size:13px;
-    }
-    .dot{width:8px;height:8px;border-radius:999px;background:var(--accent);box-shadow:0 0 0 6px rgba(34,197,94,.12)}
-    h1{margin:14px 0 10px;font-size:42px;line-height:1.1;letter-spacing:.2px}
-    @media(max-width:640px){h1{font-size:34px}}
-    .lead{max-width:900px;color:var(--muted);font-size:16px}
-
-    .grid{display:grid;gap:14px}
-    .two{grid-template-columns:repeat(2,minmax(0,1fr))}
-    .three{grid-template-columns:repeat(3,minmax(0,1fr))}
-    @media(max-width:900px){.two,.three{grid-template-columns:1fr}}
-
-    .card{
-      background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
-      border:1px solid var(--line);
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
-      padding:18px;
-    }
-    h2{margin:0 0 10px;font-size:22px}
-    h3{margin:0 0 10px;font-size:16px}
-    p{margin:0 0 10px}
-    .muted{color:var(--muted)}
-    hr{border:0;border-top:1px solid var(--line);margin:16px 0}
-
-    .law{
-      border-left:3px solid rgba(34,197,94,.55);
-      padding-left:14px;margin:14px 0;
-    }
-    .box{
-      border:1px solid rgba(212,175,55,.35);
-      background:rgba(212,175,55,.06);
-      border-radius:var(--radius);
-      padding:16px;
-    }
-    .req{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
-    .tag{
-      padding:8px 10px;border-radius:999px;
-      border:1px solid var(--line);
-      background:rgba(12,17,27,.6);
-      color:var(--text);
-      font-size:13px;
-      white-space:nowrap;
-    }
-
-    .btnRow{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
-    .btn{
-      display:inline-flex;align-items:center;justify-content:center;gap:10px;
-      padding:12px 14px;border-radius:999px;
-      border:1px solid rgba(34,197,94,.45);
-      background:rgba(34,197,94,.12);
-      color:var(--text);font-weight:800;
-      cursor:pointer;
-    }
-    .btn:hover{background:rgba(34,197,94,.18)}
-    .btn.gold{
-      border:1px solid rgba(212,175,55,.55);
-      background:rgba(212,175,55,.12);
-    }
-    .btn.gold:hover{background:rgba(212,175,55,.18)}
-    .btn.secondary{
-      border:1px solid var(--line);
-      background:transparent;
-      font-weight:750;
-      color:var(--text);
-    }
-    .btn.secondary:hover{border-color:rgba(212,175,55,.35)}
-    .btn.danger{
-      border:1px solid rgba(251,113,133,.55);
-      background:rgba(251,113,133,.10);
-    }
-    .btn.danger:hover{background:rgba(251,113,133,.14)}
-
-    .steps{
-      display:grid;
-      grid-template-columns:repeat(3,minmax(0,1fr));
-      gap:12px;
-      margin-top:12px;
-    }
-    @media(max-width:900px){.steps{grid-template-columns:1fr}}
-    .step{
-      border:1px solid var(--line);
-      border-radius:var(--radius);
-      padding:14px;
-      background:rgba(12,17,27,.55);
-    }
-    .step b{color:var(--text)}
-    .num{
-      display:inline-flex;align-items:center;justify-content:center;
-      width:28px;height:28px;border-radius:999px;
-      border:1px solid rgba(34,197,94,.5);
-      background:rgba(34,197,94,.12);
-      font-weight:900;margin-right:10px;
-    }
-
-    .warning{
-      border:1px solid rgba(251,113,133,.38);
-      background:rgba(251,113,133,.06);
-      border-radius:var(--radius);
-      padding:14px;
-      color:var(--muted);
-    }
-    .note{
-      font-size:13px;
-      color:var(--ash);
-    }
-    .list{
-      margin:0;padding-left:18px;color:var(--muted);line-height:1.9
-    }
-
-    footer{
-      border-top:1px solid var(--line);
-      padding:18px 0;
-      color:var(--muted);
-      font-size:14px;
-    }
-  </style>
+.section{padding:28px 0}
+.card{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  padding:20px;
+}
+.btnRow{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  margin-top:18px;
+}
+.btn{
+  padding:12px 18px;
+  border-radius:999px;
+  font-weight:700;
+  border:1px solid var(--accent);
+  background:rgba(34,197,94,.12);
+}
+.btn:hover{background:rgba(34,197,94,.18)}
+.btn.gold{
+  border-color:var(--gold);
+  background:rgba(212,175,55,.12);
+}
+.btn.secondary{
+  border:1px solid var(--line);
+  background:transparent;
+}
+.warning{
+  margin-top:16px;
+  border:1px solid rgba(251,113,133,.5);
+  background:rgba(251,113,133,.08);
+  padding:14px;
+  border-radius:var(--radius);
+  color:var(--muted);
+}
+footer{
+  border-top:1px solid var(--line);
+  padding:20px 0;
+  color:var(--muted);
+  font-size:14px;
+}
+</style>
 </head>
 
 <body>
 
 <header>
   <div class="wrap nav">
-    <a class="brand" href="index.html" aria-label="Income Stack Lab Home">
-      <img class="logo" src="assets/0a0a786a-3737-4309-bb8d-91cd4e404956.png" alt="Income Stack Lab Logo">
-      <div>
-        <b>INCOME STACK LAB</b><br>
-        <small class="mono muted">ISL-90 • EXECUTION GROUND</small>
-      </div>
-    </a>
-
-    <nav class="links" aria-label="Site navigation">
-      <a class="chip" href="lab-log.html">Lab Log</a>
-      <a class="chip" href="isl-90.html">Protocol</a>
-      <!-- Optional later: point to your members dashboard -->
-      <a class="chip" href="#members">Members</a>
-    </nav>
+    <div class="brand">
+      <b>INCOME STACK LAB</b><br>
+      <small style="color:var(--muted)">The Execution Ground</small>
+    </div>
+    <a class="chip" href="../-Agexgrand_plaza/app.html">← Back to Grand Plaza</a>
   </div>
 </header>
 
 <section class="hero">
   <div class="wrap">
-    <div class="kicker"><span class="dot"></span> Proof-first • Execution only • No hype</div>
-    <h1>ISL-90 is where income becomes proof.</h1>
+    <div class="kicker">Proof before payment • Builders only • 90-Day Discipline</div>
+    <h1>This is not a course. It’s a production floor.</h1>
     <p class="lead">
-      This is not motivation. This is a working lab.
-      The law is simple: <b>proof before payment</b>. Output over opinions. Verification over vibes.
+      Income Stack Lab (ISL-90) is a structured execution cohort.
+      One offer. One audience. Daily outreach. Weekly reporting.
+      If it is not recorded, it did not happen.
     </p>
-
-    <div class="law">
-      <p><b>THE LAW IN THREE LINES</b></p>
-      <p class="muted"><b>1) Learn:</b> One offer. One audience. One clear outcome.</p>
-      <p class="muted"><b>2) Practice:</b> Outreach → ask → close → repeat.</p>
-      <p class="muted"><b>3) Verify:</b> Proof submitted weekly. If it’s not recorded, it didn’t happen.</p>
-    </div>
   </div>
 </section>
 
 <main class="wrap">
 
-  <!-- ACCESS / ON-RAMP -->
-  <section class="card">
-    <h2>How to Enter ISL-90 (Fixed Sequence)</h2>
-    <p class="muted">
-      Don’t improvise the entry. Follow the staircase. This protects the lab.
-    </p>
-
-    <div class="steps" aria-label="ISL access steps">
-      <div class="step">
-        <div><span class="num">1</span><b>Pay ₦5,000 Commitment</b></div>
-        <p class="muted" style="margin-top:8px">
-          Not tuition. A seriousness filter.
-          After payment, <b>copy your Paystack reference</b>.
-        </p>
-        <div class="btnRow">
-          <a class="btn gold" href="https://paystack.shop/pay/3oak86j2sf" target="_blank" rel="noopener">
-            Pay Now (₦5,000)
-          </a>
-        </div>
-        <p class="note mono" style="margin-top:10px">You will need the reference number.</p>
-      </div>
-
-      <div class="step">
-        <div><span class="num">2</span><b>Request Access (Form)</b></div>
-        <p class="muted" style="margin-top:8px">
-          Submit your name, WhatsApp, payment reference, and your 7-Day sprint summary.
-        </p>
-        <div class="btnRow">
-          <a class="btn" href="https://forms.gle/WdTcVwLAY3qf25qRA" target="_blank" rel="noopener">
-            Request Access
-          </a>
-        </div>
-        <p class="note" style="margin-top:10px">
-          Access is issued after manual verification.
-        </p>
-      </div>
-
-      <div class="step">
-        <div><span class="num">3</span><b>Receive Your Key + Dashboard</b></div>
-        <p class="muted" style="margin-top:8px">
-          Once approved, you receive:
-          <b>your ISL key</b> + <b>members dashboard link</b> + your first execution task.
-        </p>
-        <div class="btnRow">
-          <a class="btn secondary" href="#members">
-            See What Happens Inside →
-          </a>
-        </div>
-        <p class="note" style="margin-top:10px">
-          (Phase 1 is manual. Phase 2 becomes automated with login.)
-        </p>
-      </div>
-    </div>
-
-    <hr>
-
-    <div class="warning">
-      <b class="mono">IMPORTANT:</b>
-      After payment, you must complete the access request form.
-      Without the payment reference + sprint summary, access will not be issued.
-    </div>
-  </section>
-
-  <!-- FILTER / REQUIREMENTS -->
-  <section class="section grid two" style="margin-top:14px">
-    <div class="card">
-      <h2>Founders Filter (Explicit)</h2>
-      <div class="box">
-        <h3>ISL-90 Requires:</h3>
-        <div class="req">
-          <span class="tag mono">₦5,000 Commitment</span>
-          <span class="tag mono">7-Day Proof Sprint</span>
-          <span class="tag mono">Weekly Execution Reporting</span>
-          <span class="tag mono">One Offer • One Audience</span>
-          <span class="tag mono">90-Day Cohort Discipline</span>
-        </div>
-        <hr>
-        <p class="muted">
-          This is a builders’ cohort. Observers self-select out.
-          If you want theory, don’t enter. If you want results, obey the sequence.
-        </p>
-      </div>
-
-      <div class="btnRow">
-        <a class="btn gold" href="https://paystack.shop/pay/3oak86j2sf" target="_blank" rel="noopener">Pay ₦5,000</a>
-        <a class="btn" href="https://forms.gle/WdTcVwLAY3qf25qRA" target="_blank" rel="noopener">Request Access</a>
-        <a class="btn secondary" href="isl-90.html">Read Protocol</a>
-      </div>
-    </div>
-
-    <div class="card">
-      <h2>What You Do Inside ISL-90</h2>
-      <p class="muted">
-        ISL is not a library. It’s a production floor.
-        Each week ends with a deliverable. If there is no deliverable, there is no progress.
-      </p>
-
-      <hr>
-
-      <ol class="list">
-        <li><b>Offer Clarity:</b> define one outcome you can deliver.</li>
-        <li><b>Proof Assets:</b> simple page + proof samples + pricing anchor.</li>
-        <li><b>Daily Outreach:</b> consistent asks, tracked.</li>
-        <li><b>Weekly Report:</b> numbers + lessons + next iteration.</li>
-        <li><b>Close & Deliver:</b> small wins → repeatable system.</li>
-      </ol>
-
-      <p class="note" style="margin-top:10px">
-        The lab is designed to turn “ideas” into “evidence”.
-      </p>
-    </div>
-  </section>
-
-  <!-- MEMBERS / DASHBOARD (PHASE 1) -->
-  <section class="card" id="members" style="margin-top:14px">
-    <h2>Members Area (After Approval)</h2>
-    <p class="muted">
-      After your access is confirmed, you will receive your <b>ISL key</b> and a dashboard link.
-      In Phase 1 (static), this is manual. In Phase 2, it becomes login-based.
-    </p>
-
-    <div class="grid two" style="margin-top:12px">
-      <div class="card" style="background:rgba(12,17,27,.55)">
-        <h3>What We Verify Before Issuing Access</h3>
-        <ul class="list">
-          <li>Payment reference matches the applicant</li>
-          <li>7-Day sprint summary is complete (proof attached)</li>
-          <li>Offer is clear enough to execute (or you accept correction)</li>
-        </ul>
-      </div>
-
-      <div class="card" style="background:rgba(12,17,27,.55)">
-        <h3>What You Get After Approval</h3>
-        <ul class="list">
-          <li>Your cohort assignment (ISL-90)</li>
-          <li>Your first execution task</li>
-          <li>Weekly reporting template</li>
-          <li>Proof submission method</li>
-        </ul>
-
-        <div class="btnRow" style="margin-top:12px">
-          <!-- Replace later with your real dashboard URL (isl-dashboard.html or a lodge-gated page) -->
-          <a class="btn secondary" href="#" onclick="alert('This link is issued after approval. Check your WhatsApp message for your dashboard link + key.'); return false;">
-            Open Members Dashboard
-          </a>
-        </div>
-        <p class="note" style="margin-top:10px">
-          (We keep this button here so the page explains the flow, but the link is issued only after approval.)
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <!-- ECOSYSTEM INTEGRATION -->
-  <section class="card" style="margin-top:14px">
-    <h2>Ecosystem Integration</h2>
-    <p class="muted">
-      ISL is the execution arm of the covenant:
-      <b>Stewardship</b> (Charter) → <b>Discipline</b> (Smart Money) → <b>Execution</b> (ISL proof).
-    </p>
-    <hr>
-    <p class="muted">
-      Stewardship is the why. Discipline is the foundation. Execution is the proof.
-    </p>
-  </section>
-
-  <!-- SUPPORT -->
-  <section class="card" style="margin-top:14px">
-    <h2>Support / Issues</h2>
-    <p class="muted">
-      If Paystack succeeds but you can’t submit the form (or you’re unsure about your reference),
-      don’t panic. Send your details directly.
+  <section class="section card">
+    <h2>How to Enter ISL-90</h2>
+    <p style="color:var(--muted)">
+      The entry process is fixed. Do not skip steps.
     </p>
 
     <div class="btnRow">
-      <a class="btn secondary" href="mailto:arinonebusiness@gmail.com">Email Support</a>
-      <a class="btn danger" href="#" onclick="alert('WhatsApp support: +234 813 680 5462'); return false;">WhatsApp Support</a>
+      <a class="btn gold" href="https://paystack.shop/pay/3oak86j2sf" target="_blank">
+        1️⃣ Pay ₦5,000 Commitment
+      </a>
+
+      <a class="btn secondary" href="https://forms.gle/WdTcVwLAY3qf25qRA" target="_blank">
+        2️⃣ Submit Access Request Form
+      </a>
+
+      <a class="btn secondary" href="members.html">
+        3️⃣ Already Approved? Enter Members Door →
+      </a>
     </div>
 
-    <p class="note" style="margin-top:10px">
-      Include: Full name • WhatsApp name • Payment reference • Screenshot • Sprint summary.
+    <div class="warning">
+      After payment, copy your Paystack reference and complete the request form.
+      Access is issued manually after verification.
+    </div>
+  </section>
+
+  <section class="section card">
+    <h2>What Happens Inside</h2>
+    <p style="color:var(--muted)">
+      Inside ISL-90 you will:
     </p>
+    <ul style="color:var(--muted);line-height:1.9">
+      <li>Define one income offer</li>
+      <li>Build simple proof assets</li>
+      <li>Perform daily outreach</li>
+      <li>Submit weekly execution reports</li>
+      <li>Close and deliver small, real income</li>
+    </ul>
   </section>
 
 </main>
 
 <footer>
-  <div class="wrap" style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap">
-    <span>© Income Stack Lab — Proof before payment.</span>
-    <span class="mono">Deploy: GitHub Pages</span>
+  <div class="wrap">
+    © Income Stack Lab — Output over opinions.
   </div>
 </footer>
 
 </body>
 </html>
+
 
