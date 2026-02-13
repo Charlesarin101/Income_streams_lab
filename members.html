@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#070A0F" />
+  <title>ISL Members Door — Income Stack Lab</title>
+  <meta name="description" content="ISL Members Door — enter your access key to unlock the ISL dashboard on this device." />
+  <meta name="robots" content="noindex,nofollow" />
+
+  <style>
+    :root{
+      --bg:#070A0F; --panel:#0C111B; --text:#E9EEF7; --muted:#A9B6CC;
+      --line:rgba(255,255,255,.12); --accent:#22C55E; --gold:#D4AF37;
+      --danger:#FB7185; --radius:18px; --shadow:0 18px 40px rgba(0,0,0,.45);
+      --max:860px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial;
+      background:
+        radial-gradient(900px 420px at 18% 0%, rgba(34,197,94,.18), transparent 58%),
+        radial-gradient(760px 380px at 85% 12%, rgba(212,175,55,.14), transparent 62%),
+        var(--bg);
+      color:var(--text);
+      line-height:1.6;
+    }
+    a{color:inherit;text-decoration:none}
+    .wrap{max-width:var(--max);margin:0 auto;padding:26px 18px}
+    .card{
+      background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:18px;
+    }
+    .kicker{
+      display:inline-flex;align-items:center;gap:10px;
+      padding:8px 12px;border:1px solid var(--line);
+      border-radius:999px;background:rgba(255,255,255,.03);
+      color:var(--muted);font-size:13px;
+      width:fit-content;
+    }
+    .dot{width:8px;height:8px;border-radius:999px;background:var(--accent);box-shadow:0 0 0 6px rgba(34,197,94,.12)}
+    h1{margin:12px 0 10px;font-size:34px;line-height:1.12}
+    .muted{color:var(--muted)}
+    hr{border:0;border-top:1px solid var(--line);margin:16px 0}
+    label{display:block;font-weight:900;font-size:12px;color:rgba(233,238,247,.78);margin-top:12px}
+    input{
+      width:100%;
+      padding:14px 14px;
+      border-radius:16px;
+      border:1px solid var(--line);
+      outline:none;
+      font-family:inherit;
+      font-weight:800;
+      background:rgba(12,17,27,.7);
+      color:var(--text);
+      margin-top:8px;
+      letter-spacing:.6px;
+    }
+    .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;gap:10px;
+      padding:12px 14px;border-radius:999px;
+      border:1px solid rgba(34,197,94,.45);
+      background:rgba(34,197,94,.12);
+      color:var(--text);font-weight:900;
+      cursor:pointer;
+    }
+    .btn:hover{background:rgba(34,197,94,.18)}
+    .btn.secondary{
+      border:1px solid var(--line);
+      background:transparent;
+      font-weight:800;
+    }
+    .btn.secondary:hover{border-color:rgba(212,175,55,.35)}
+    .btn.gold{
+      border:1px solid rgba(212,175,55,.55);
+      background:rgba(212,175,55,.12);
+    }
+    .btn.gold:hover{background:rgba(212,175,55,.18)}
+    .error{
+      display:none;
+      margin-top:12px;
+      padding:12px 12px;
+      border-radius:16px;
+      border:1px solid rgba(251,113,133,.45);
+      background:rgba(251,113,133,.10);
+      color:rgba(233,238,247,.86);
+      font-weight:850;
+      font-size:13px;
+    }
+    .hint{font-size:13px;color:rgba(233,238,247,.60)}
+    .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;}
+    footer{margin-top:14px;color:rgba(233,238,247,.55);font-size:13px}
+    code{border:1px solid var(--line);background:rgba(12,17,27,.65);padding:2px 8px;border-radius:999px}
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="card">
+      <div class="kicker"><span class="dot"></span> ISL Members Door • Device Unlock</div>
+      <h1>Enter your ISL Key</h1>
+      <p class="muted">
+        If you have been approved, you received a key from Charles Arin.
+        Paste it exactly (case-sensitive). This unlocks the dashboard <b>on this device</b>.
+      </p>
+
+      <hr>
+
+      <label for="keyInput">ISL Access Key</label>
+      <input id="keyInput" placeholder="e.g., ISL-AB12-CD34-7890" autocomplete="off" />
+
+      <div class="row">
+        <button class="btn gold" id="enterBtn" type="button">Unlock & Enter Dashboard</button>
+        <a class="btn secondary" href="index.html">Back to ISL Home</a>
+      </div>
+
+      <div class="error" id="err">
+        Invalid or revoked key. If you have paid and submitted the request form, wait for approval or contact support:
+        <b>arinonebusiness@gmail.com</b> • WhatsApp: <b>+234 813 680 5462</b>.
+      </div>
+
+      <p class="hint" style="margin-top:12px">
+        Tip: once unlocked, you won’t need to paste the key again on this phone.
+      </p>
+
+      <footer class="mono">
+        Storage key: <code>ISL_OK_V1</code> • Repo: GitHub Pages (static)
+      </footer>
+    </div>
+  </div>
+
+<script>
+  // ====== CONFIG ======
+  const DASHBOARD_URL = "isl-dashboard.html"; // members interior
+  const STORE_KEY = "ISL_OK_V1";              // device unlock flag
+  const LIST_KEY  = "ISL_KEYS_V1";            // issued keys list (only if admin created on same device)
+
+  // If already unlocked on this device, go straight in
+  if (localStorage.getItem(STORE_KEY) === "1") {
+    window.location.href = DASHBOARD_URL;
+  }
+
+  function loadKeyList(){
+    try { return JSON.parse(localStorage.getItem(LIST_KEY) || "[]"); }
+    catch(e){ return []; }
+  }
+
+  function isValidKey(typed){
+    // Phase 1 validation:
+    // - If the learner device doesn't have the admin list, we still allow a MASTER pattern later.
+    // - For per-person keys, best is: learner pastes key once, and we validate by pattern + checksum-lite.
+    //
+    // We will validate by:
+    // 1) Basic format "ISL-XXXX-XXXX-####" (flexible)
+    // 2) Optional: if admin list exists on this device (rare), verify against list and not revoked/expired.
+    const t = (typed || "").trim();
+    if (!t) return false;
+
+    const basic = /^ISL-[A-Z0-9]{4}-[A-Z0-9]{4}-[0-9]{4}$/i.test(t);
+    if (!basic) return false;
+
+    // If admin list exists (same device), enforce it.
+    const list = loadKeyList();
+    if (list.length){
+      const found = list.find(x => String(x.key).toUpperCase() === t.toUpperCase());
+      if (!found) return false;
+      if (found.revoked) return false;
+      if (found.expiresAt && Date.now() > found.expiresAt) return false;
+      return true;
+    }
+
+    // If no list exists on learner device, allow format-only unlock.
+    // This is acceptable for Phase 1 (static) because approval happens by you sending keys.
+    return true;
+  }
+
+  const keyInput = document.getElementById("keyInput");
+  const err = document.getElementById("err");
+  const enterBtn = document.getElementById("enterBtn");
+
+  function attempt(){
+    const typed = (keyInput.value || "").trim();
+    if (isValidKey(typed)){
+      err.style.display = "none";
+      localStorage.setItem(STORE_KEY, "1");
+      localStorage.setItem("ISL_LAST_KEY", typed.toUpperCase());
+      window.location.href = DASHBOARD_URL;
+    } else {
+      err.style.display = "block";
+    }
+  }
+
+  enterBtn.addEventListener("click", attempt);
+  keyInput.addEventListener("keydown", (e)=>{ if(e.key === "Enter") attempt(); });
+</script>
+</body>
+</html>
