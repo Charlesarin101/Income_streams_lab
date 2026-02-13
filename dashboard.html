@@ -1,0 +1,1288 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#0B3D2E" />
+  <title>Income Streams Lab — ISL Dashboard</title>
+  <meta name="description" content="Income Streams Lab (ISL) — 90-day execution dashboard: roadmap, daily mission, proof vault, outreach, portfolio, accountability." />
+
+  <style>
+    :root{
+      --green:#0B3D2E;
+      --green2:#083326;
+      --gold:#F4B41A;
+      --bg:#F7FAF9;
+      --card:#FFFFFF;
+      --ink:#0F0F0F;
+      --muted:#5F6B66;
+      --line:rgba(15,15,15,.10);
+      --shadow:0 18px 45px rgba(0,0,0,.10);
+      --r18:18px;
+      --r26:26px;
+      --max:1200px;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      color:var(--ink);
+      background:
+        radial-gradient(900px 600px at 15% 0%, rgba(244,180,26,.12), transparent 65%),
+        radial-gradient(900px 600px at 85% 10%, rgba(11,61,46,.10), transparent 62%),
+        var(--bg);
+      line-height:1.55;
+    }
+    a{color:inherit;text-decoration:none}
+    .container{max-width:var(--max);margin:0 auto;padding:0 16px}
+    header{
+      position:sticky;top:0;z-index:60;
+      background:rgba(247,250,249,.92);
+      backdrop-filter:saturate(180%) blur(10px);
+      border-bottom:1px solid var(--line);
+    }
+    .nav{
+      display:flex;align-items:center;justify-content:space-between;gap:12px;
+      padding:12px 0;
+    }
+    .brand{display:flex;align-items:center;gap:12px}
+    .mark{
+      width:44px;height:44px;border-radius:14px;
+      display:grid;place-items:center;
+      background:linear-gradient(135deg,var(--green),var(--green2));
+      box-shadow:0 10px 26px rgba(11,61,46,.22);
+      position:relative;overflow:hidden;
+    }
+    .mark:before{
+      content:"";position:absolute;inset:-40%;
+      background:radial-gradient(circle at 30% 30%, rgba(244,180,26,.55), transparent 55%);
+      transform:rotate(10deg);
+    }
+    .mark svg{position:relative;z-index:1}
+    .brandTitle{display:flex;flex-direction:column;line-height:1.05}
+    .brandTitle b{font-weight:900;letter-spacing:.2px}
+    .brandTitle small{color:rgba(15,15,15,.62);font-weight:800;margin-top:6px}
+    .pill{
+      display:inline-flex;align-items:center;gap:10px;
+      padding:9px 12px;border-radius:999px;
+      background:#fff;border:1px solid var(--line);
+      font-weight:900;font-size:12px;color:rgba(15,15,15,.72);
+      white-space:nowrap;
+    }
+    .pill .dot{width:10px;height:10px;border-radius:99px;background:var(--gold);box-shadow:0 0 0 4px rgba(244,180,26,.16)}
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;gap:10px;
+      border-radius:999px;
+      padding:10px 14px;
+      border:1px solid transparent;
+      font-weight:900;
+      cursor:pointer;
+      user-select:none;
+      white-space:nowrap;
+      transition:.15s ease;
+      background:#fff;
+    }
+    .btn:hover{transform:translateY(-1px)}
+    .btn.gold{background:var(--gold);border-color:rgba(244,180,26,.60);color:#1b1607}
+    .btn.dark{background:var(--green);border-color:transparent;color:#fff}
+    .btn.ghost{background:transparent;border-color:rgba(11,61,46,.18);color:var(--green)}
+    .btn.ghost:hover{background:rgba(11,61,46,.06)}
+    main{padding:16px 0 30px}
+
+    /* Layout */
+    .layout{
+      display:grid;
+      grid-template-columns: 360px 1fr;
+      gap:14px;
+      align-items:start;
+    }
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:var(--r26);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .cardPad{padding:14px}
+    h1,h2,h3{margin:0 0 8px;color:var(--green);letter-spacing:-.2px}
+    h1{font-size:20px}
+    h2{font-size:16px}
+    .muted{color:rgba(15,15,15,.62);font-weight:750;font-size:13px;line-height:1.45}
+    .hr{height:1px;background:var(--line);margin:12px 0}
+
+    /* Left rail: tabs */
+    .tabs{display:flex;flex-direction:column;gap:10px}
+    .tabBtn{
+      width:100%;
+      text-align:left;
+      border:1px solid var(--line);
+      background:#fff;
+      border-radius:16px;
+      padding:12px 12px;
+      font-weight:950;
+      display:flex;align-items:center;justify-content:space-between;gap:10px;
+      cursor:pointer;
+    }
+    .tabBtn small{font-weight:800;color:rgba(15,15,15,.55)}
+    .tabBtn.active{
+      border-color:rgba(244,180,26,.65);
+      box-shadow:0 10px 22px rgba(244,180,26,.18);
+    }
+
+    /* Right content */
+    .topStats{
+      display:grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap:10px;
+    }
+    .stat{
+      border:1px solid var(--line);
+      border-radius:16px;
+      background:#fff;
+      padding:10px;
+    }
+    .stat b{display:block;color:var(--green);font-size:14px}
+    .stat span{display:block;color:rgba(15,15,15,.62);font-weight:800;font-size:12px;margin-top:4px}
+    .progressWrap{
+      border:1px solid var(--line);
+      border-radius:16px;
+      background:#fff;
+      padding:10px;
+      margin-top:10px;
+    }
+    .bar{
+      height:10px;border-radius:999px;background:rgba(15,15,15,.08);
+      overflow:hidden;margin-top:8px;
+    }
+    .bar > div{height:100%;width:0%;background:linear-gradient(90deg,var(--gold),rgba(244,180,26,.55))}
+    .subRow{
+      display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between;
+      margin-top:10px;
+    }
+
+    /* Forms */
+    label{display:block;font-weight:950;font-size:12px;color:rgba(15,15,15,.72);margin-top:10px}
+    input,select,textarea{
+      width:100%;
+      padding:12px 12px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      outline:none;
+      font-family:inherit;
+      background:#fff;
+      margin-top:6px;
+      font-weight:750;
+    }
+    textarea{min-height:96px;resize:vertical}
+    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .row > *{flex:1;min-width:220px}
+    .checkRow{display:flex;gap:10px;align-items:center;margin-top:12px;flex-wrap:wrap}
+    .checkRow label{margin:0;font-size:13px;font-weight:900;color:rgba(15,15,15,.70);display:flex;gap:10px;align-items:center}
+    .hint{font-size:12px;color:rgba(15,15,15,.55);font-weight:750;margin-top:8px}
+    .toast{
+      display:none;
+      margin-top:10px;
+      padding:10px 12px;
+      border-radius:14px;
+      background:rgba(11,61,46,.08);
+      border:1px solid rgba(11,61,46,.14);
+      color:rgba(11,61,46,.95);
+      font-weight:900;
+      font-size:12px;
+    }
+
+    /* Tables */
+    table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden}
+    th,td{padding:10px;border-bottom:1px solid var(--line);font-size:13px;text-align:left}
+    th{font-size:12px;color:#444;background:rgba(15,15,15,.03)}
+    tr:last-child td{border-bottom:none}
+    code{background:#fff;border:1px solid var(--line);padding:2px 6px;border-radius:8px}
+
+    /* Roadmap blocks */
+    .phase{
+      border:1px solid var(--line);
+      border-radius:16px;
+      background:#fff;
+      padding:12px;
+      margin-top:10px;
+    }
+    .phaseHead{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+    .badge{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:7px 10px;border-radius:999px;
+      font-weight:950;font-size:12px;
+      border:1px solid var(--line);
+      background:#fff;
+      white-space:nowrap;
+    }
+    .badge.ok{border-color:rgba(11,61,46,.22);background:rgba(11,61,46,.08);color:var(--green)}
+    .badge.lock{opacity:.65}
+    .badge.active{border-color:rgba(244,180,26,.55);background:rgba(244,180,26,.14);color:#1b1607}
+
+    /* Mobile */
+    @media (max-width: 980px){
+      .layout{grid-template-columns:1fr}
+      .topStats{grid-template-columns:repeat(2,1fr)}
+    }
+  </style>
+</head>
+
+<body>
+<header>
+  <div class="container">
+    <div class="nav">
+      <div class="brand" aria-label="Income Streams Lab">
+        <div class="mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
+            <path d="M12 2.6l8 3.2v6.2c0 5.1-3.5 9.2-8 9.9-4.5-.7-8-4.8-8-9.9V5.8L12 2.6z" stroke="rgba(255,255,255,.92)" stroke-width="1.6"/>
+            <path d="M8.3 12h6.9l-2.2-2.2 1.3-1.3 4.4 4.4-4.4 4.4-1.3-1.3 2.2-2.2H8.3V12z" fill="#F4B41A"/>
+          </svg>
+        </div>
+        <div class="brandTitle">
+          <b>Income Streams Lab <span style="color:var(--gold)">ISL-90</span></b>
+          <small>Execution Dashboard • Action → Proof → Review</small>
+        </div>
+      </div>
+
+      <div class="row" style="justify-content:flex-end;flex:0;gap:10px">
+        <span class="pill"><span class="dot"></span> Status: <b id="statusPill">Active</b></span>
+        <button class="btn ghost" id="exportBtn" type="button">Export Proof (JSON)</button>
+        <button class="btn dark" id="resetBtn" type="button">Reset (This Device)</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="container">
+    <div class="layout">
+      <!-- LEFT: NAV -->
+      <section class="card">
+        <div class="cardPad">
+          <h1>Control Panel</h1>
+          <p class="muted" style="margin:0">
+            This dashboard stores your progress <b>on this device</b> (Phase 1 static build).
+          </p>
+          <div class="hr"></div>
+
+          <div class="tabs" id="tabs">
+            <button class="tabBtn active" data-tab="overview">Main Dashboard <small>Home</small></button>
+            <button class="tabBtn" data-tab="roadmap">Roadmap <small>Phases</small></button>
+            <button class="tabBtn" data-tab="daily">Daily Execution <small>Proof</small></button>
+            <button class="tabBtn" data-tab="vault">Proof Vault <small>History</small></button>
+            <button class="tabBtn" data-tab="outreach">Outreach Tracker <small>Weekly</small></button>
+            <button class="tabBtn" data-tab="portfolio">Portfolio Builder <small>Links</small></button>
+            <button class="tabBtn" data-tab="income">First Income Tracker <small>Milestone</small></button>
+            <button class="tabBtn" data-tab="accountability">Accountability <small>Review</small></button>
+          </div>
+
+          <div class="hr"></div>
+          <div class="phase">
+            <div class="phaseHead">
+              <div>
+                <b style="color:var(--green)">Cohort Settings</b>
+                <div class="muted">Optional: store your name + start date.</div>
+              </div>
+            </div>
+
+            <label for="learnerName">Your Name</label>
+            <input id="learnerName" placeholder="e.g., Aisha / Musa / John" />
+
+            <div class="row">
+              <div>
+                <label for="startDate">Start Date</label>
+                <input id="startDate" type="date" />
+              </div>
+              <div>
+                <label for="dayNumber">Day Number (1–90)</label>
+                <input id="dayNumber" type="number" min="1" max="90" placeholder="Auto if start date set" />
+              </div>
+            </div>
+
+            <div class="hint">Tip: If you set Start Date, Day Number auto-calculates daily.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- RIGHT: CONTENT -->
+      <section class="card">
+        <div class="cardPad">
+          <!-- OVERVIEW -->
+          <div class="panel" id="panel-overview">
+            <h1>Main Dashboard</h1>
+            <p class="muted" style="margin-top:0">
+              This is not a content vault. It is a production system: <b>Do</b> → <b>Submit proof</b> → <b>Repeat</b>.
+            </p>
+
+            <div class="topStats" style="margin-top:12px">
+              <div class="stat">
+                <b id="statDay">Day —</b>
+                <span>of 90</span>
+              </div>
+              <div class="stat">
+                <b id="statPhase">Phase —</b>
+                <span>current phase</span>
+              </div>
+              <div class="stat">
+                <b id="statStreak">0</b>
+                <span>daily streak</span>
+              </div>
+              <div class="stat">
+                <b id="statProof">0</b>
+                <span>proof submitted</span>
+              </div>
+            </div>
+
+            <div class="progressWrap">
+              <b style="color:var(--green)">Overall Progress</b>
+              <div class="muted" id="progressText" style="margin-top:4px">0 / 90 complete</div>
+              <div class="bar"><div id="progressBar"></div></div>
+            </div>
+
+            <div class="phase" style="margin-top:12px">
+              <div class="phaseHead">
+                <div>
+                  <b style="color:var(--green)">Next Step</b>
+                  <div class="muted" id="nextStepText">Open Daily Execution and submit today’s proof.</div>
+                </div>
+                <span class="badge active" id="nextBadge">Today</span>
+              </div>
+
+              <div class="subRow">
+                <button class="btn gold" type="button" id="goDailyBtn">Submit Today’s Proof</button>
+                <button class="btn" type="button" id="goRoadmapBtn">View Roadmap</button>
+              </div>
+            </div>
+
+            <div class="phase">
+              <div class="phaseHead">
+                <div>
+                  <b style="color:var(--green)">How Proof Works</b>
+                  <div class="muted">Short, real, verifiable. No perfection required.</div>
+                </div>
+                <span class="badge ok">Discipline</span>
+              </div>
+              <ul class="muted" style="margin:10px 0 0;padding-left:18px">
+                <li><b>Write</b> a short reflection, rule set, or plan</li>
+                <li><b>Screenshot</b> your tracker, totals, or evidence</li>
+                <li><b>Paste a link</b> to your output (portfolio / doc / repo)</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- ROADMAP -->
+          <div class="panel" id="panel-roadmap" style="display:none">
+            <h1>Roadmap</h1>
+            <p class="muted" style="margin-top:0">
+              Four phases. No skipping. Execution unlocks depth.
+            </p>
+
+            <div class="phase">
+              <div class="phaseHead">
+                <div>
+                  <b>Phase 1 — Clarity & Skill Decision</b>
+                  <div class="muted">Days 1–14 • Choose skill • Define offer • Set system baseline</div>
+                </div>
+                <span class="badge" id="phaseBadge1">—</span>
+              </div>
+              <ul class="muted" style="margin:10px 0 0;padding-left:18px">
+                <li>Choose skill + income hypothesis</li>
+                <li>Draft your first offer</li>
+                <li>Create proof template (daily)</li>
+                <li>Submit Phase 1 snapshot</li>
+              </ul>
+            </div>
+
+            <div class="phase">
+              <div class="phaseHead">
+                <div>
+                  <b>Phase 2 — Skill Sprint</b>
+                  <div class="muted">Days 15–45 • Daily output • Weekly outreach • Portfolio build</div>
+                </div>
+                <span class="badge" id="phaseBadge2">—</span>
+              </div>
+              <ul class="muted" style="margin:10px 0 0;padding-left:18px">
+                <li>Daily skill output</li>
+                <li>Weekly outreach attempts (minimum 3)</li>
+                <li>Portfolio proof links</li>
+              </ul>
+            </div>
+
+            <div class="phase">
+              <div class="phaseHead">
+                <div>
+                  <b>Phase 3 — First Money Protocol</b>
+                  <div class="muted">Days 46–75 • Monetize output • Convert consistency to income</div>
+                </div>
+                <span class="badge" id="phaseBadge3">—</span>
+              </div>
+              <ul class="muted" style="margin:10px 0 0;padding-left:18px">
+                <li>Offer refinement + pricing</li>
+                <li>Client delivery workflow</li>
+                <li>First income verification</li>
+              </ul>
+            </div>
+
+            <div class="phase">
+              <div class="phaseHead">
+                <div>
+                  <b>Phase 4 — System Builder</b>
+                  <div class="muted">Days 76–90 • Turn process into a repeatable income system</div>
+                </div>
+                <span class="badge" id="phaseBadge4">—</span>
+              </div>
+              <ul class="muted" style="margin:10px 0 0;padding-left:18px">
+                <li>System blueprint: Offer + Workflow + Lead source + Delivery</li>
+                <li>90-day continuation plan</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- DAILY -->
+          <div class="panel" id="panel-daily" style="display:none">
+            <h1>Daily Execution</h1>
+            <p class="muted" style="margin-top:0">
+              Choose your day. Complete the mission. Submit proof. Mark complete.
+            </p>
+
+            <div class="row" style="margin-top:8px">
+              <div>
+                <label for="daySelect">Select Day</label>
+                <select id="daySelect"></select>
+              </div>
+              <div>
+                <label>Progress</label>
+                <div class="pill" id="dailyProgressPill"><span class="dot"></span> 0 / 90 complete</div>
+              </div>
+            </div>
+
+            <div class="phase" style="margin-top:10px">
+              <div class="phaseHead">
+                <div>
+                  <b id="dailyTitle">Day —</b>
+                  <div class="muted" id="dailyObjective">Objective will appear here.</div>
+                </div>
+                <span class="badge active" id="dailyPhase">Phase —</span>
+              </div>
+
+              <label for="dailyAction">Action (do today)</label>
+              <textarea id="dailyAction" placeholder="Complete the action shown. You may adapt to your reality."></textarea>
+
+              <label for="dailyProof">Proof (paste link / describe screenshot / write)</label>
+              <textarea id="dailyProof" placeholder="Paste proof link or describe your evidence clearly."></textarea>
+
+              <label for="dailyReflection">Reflection (2–4 lines)</label>
+              <textarea id="dailyReflection" placeholder="What changed today? What will you repeat tomorrow?"></textarea>
+
+              <div class="checkRow">
+                <label><input type="checkbox" id="dailyDone"> Mark Day as Completed</label>
+                <button class="btn gold" type="button" id="saveDayBtn">Save Day</button>
+                <button class="btn" type="button" id="goNextDayBtn">Save & Next Day</button>
+              </div>
+
+              <div class="toast" id="toast">Saved. Your progress is stored on this device.</div>
+
+              <div class="hr"></div>
+
+              <div class="muted">
+                <b>Submission (Phase 1 static):</b> For now, screenshot your proof before submission.
+                When you are ready, we connect a private proof form and enable “Submit Proof” fully.
+              </div>
+
+              <div class="subRow">
+                <a class="btn dark" href="#" id="submitBtn">Submit Proof (when enabled)</a>
+                <button class="btn" type="button" id="copyProofBtn">Copy Today’s Proof</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- VAULT -->
+          <div class="panel" id="panel-vault" style="display:none">
+            <h1>Proof Vault</h1>
+            <p class="muted" style="margin-top:0">
+              Your evidence record. Consistency becomes visible.
+            </p>
+            <div style="overflow:auto;margin-top:10px">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Day</th>
+                    <th>Phase</th>
+                    <th>Status</th>
+                    <th>Proof (preview)</th>
+                  </tr>
+                </thead>
+                <tbody id="vaultRows"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- OUTREACH -->
+          <div class="panel" id="panel-outreach" style="display:none">
+            <h1>Outreach Tracker</h1>
+            <p class="muted" style="margin-top:0">
+              Minimum: <b>3 outreach attempts per week</b>. This prevents passive learning.
+            </p>
+
+            <div class="row" style="margin-top:8px">
+              <div>
+                <label for="weekSelect">Week</label>
+                <select id="weekSelect"></select>
+              </div>
+              <div>
+                <label>Weekly Target</label>
+                <div class="pill"><span class="dot"></span> 3 attempts minimum</div>
+              </div>
+            </div>
+
+            <div class="phase" style="margin-top:10px">
+              <div class="phaseHead">
+                <div>
+                  <b id="weekTitle">Week —</b>
+                  <div class="muted">Log outreach attempts (clients, partners, leads).</div>
+                </div>
+                <span class="badge ok" id="weekCount">0 attempts</span>
+              </div>
+
+              <label for="outreachEntry">Add outreach log (one per line)</label>
+              <textarea id="outreachEntry" placeholder="Example: Client A — IG DM sent — awaiting reply"></textarea>
+
+              <div class="subRow">
+                <button class="btn gold" type="button" id="saveOutreachBtn">Save Week</button>
+                <button class="btn" type="button" id="clearOutreachBtn">Clear Week</button>
+              </div>
+
+              <div class="hint">Tip: Keep entries simple: Name — channel — result.</div>
+            </div>
+          </div>
+
+          <!-- PORTFOLIO -->
+          <div class="panel" id="panel-portfolio" style="display:none">
+            <h1>Portfolio Builder</h1>
+            <p class="muted" style="margin-top:0">
+              Store links to your output. This becomes your proof archive and portfolio.
+            </p>
+
+            <div class="phase" style="margin-top:10px">
+              <div class="phaseHead">
+                <div>
+                  <b>Portfolio Links</b>
+                  <div class="muted">Google Drive, GitHub, Canva, Behance, WhatsApp catalogue, etc.</div>
+                </div>
+                <span class="badge ok" id="portfolioCount">0 links</span>
+              </div>
+
+              <label for="portfolioLinks">Links (one per line)</label>
+              <textarea id="portfolioLinks" placeholder="https://..."></textarea>
+
+              <div class="subRow">
+                <button class="btn gold" type="button" id="savePortfolioBtn">Save Links</button>
+                <button class="btn" type="button" id="clearPortfolioBtn">Clear</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- FIRST INCOME -->
+          <div class="panel" id="panel-income" style="display:none">
+            <h1>First Income Tracker</h1>
+            <p class="muted" style="margin-top:0">
+              This is a milestone verification, not a brag panel.
+            </p>
+
+            <div class="phase" style="margin-top:10px">
+              <div class="phaseHead">
+                <div>
+                  <b id="incomeStatus">Status: Not Earned Yet</b>
+                  <div class="muted">When earned, record evidence: amount + date + method + proof.</div>
+                </div>
+                <span class="badge" id="incomeBadge">Milestone</span>
+              </div>
+
+              <div class="row">
+                <div>
+                  <label for="incomeAmount">Amount</label>
+                  <input id="incomeAmount" placeholder="e.g., 10 / 5000 / $5" />
+                </div>
+                <div>
+                  <label for="incomeDate">Date</label>
+                  <input id="incomeDate" type="date" />
+                </div>
+              </div>
+
+              <label for="incomeMethod">Method</label>
+              <input id="incomeMethod" placeholder="e.g., service delivery / affiliate / mini job / sale" />
+
+              <label for="incomeProof">Proof link / description</label>
+              <textarea id="incomeProof" placeholder="Paste screenshot link or describe evidence"></textarea>
+
+              <div class="checkRow">
+                <label><input type="checkbox" id="incomeEarned"> Mark as Earned</label>
+                <button class="btn gold" type="button" id="saveIncomeBtn">Save</button>
+                <button class="btn" type="button" id="clearIncomeBtn">Clear</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- ACCOUNTABILITY -->
+          <div class="panel" id="panel-accountability" style="display:none">
+            <h1>Accountability Review</h1>
+            <p class="muted" style="margin-top:0">
+              Weekly review locks learning into improvement.
+            </p>
+
+            <div class="phase" style="margin-top:10px">
+              <div class="phaseHead">
+                <div>
+                  <b>Weekly Review</b>
+                  <div class="muted">Submit every Sunday (for now, screenshot and share).</div>
+                </div>
+                <span class="badge ok" id="reviewStatus">Draft</span>
+              </div>
+
+              <label for="reviewWins">3 wins this week</label>
+              <textarea id="reviewWins" placeholder="1) ...&#10;2) ...&#10;3) ..."></textarea>
+
+              <label for="reviewFixes">2 corrections</label>
+              <textarea id="reviewFixes" placeholder="1) ...&#10;2) ..."></textarea>
+
+              <label for="reviewNext">Next week focus</label>
+              <textarea id="reviewNext" placeholder="What will you produce? What will you outreach? What system will you tighten?"></textarea>
+
+              <div class="subRow">
+                <button class="btn gold" type="button" id="saveReviewBtn">Save Review</button>
+                <button class="btn" type="button" id="copyReviewBtn">Copy Review</button>
+              </div>
+
+              <div class="hint">Tip: Keep it short, measurable, and honest.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</main>
+
+<script>
+  // =========================
+  // ISL-90 STATIC STATE (Phase 1)
+  // =========================
+  const KEY = "ISL_DASHBOARD_V1";
+
+  // Build 90-day curriculum baseline (lightweight — you can refine later)
+  // Each day has: title, objective, defaultAction, defaultProof
+  function buildCurriculum(){
+    const days = [];
+    for(let i=1;i<=90;i++){
+      const phase = getPhase(i);
+      const title = `Day ${i} — ${phase.label}`;
+      const objective = phase.objective;
+      const defaultAction = phase.action(i);
+      const defaultProof = phase.proof(i);
+      days.push({ day:i, phase:phase.name, title, objective, defaultAction, defaultProof });
+    }
+    return days;
+  }
+
+  function getPhase(day){
+    if(day <= 14){
+      return {
+        name:"PHASE1",
+        label:"Clarity & Skill Decision",
+        objective:"Choose your skill, define your income hypothesis, and build your execution baseline.",
+        action:(d)=>`Complete your Day ${d} clarity task: refine skill choice, offer draft, and proof template.`,
+        proof:(d)=>`Write 3–6 lines: what you decided today + one evidence item (note/screenshot/link).`
+      };
+    }
+    if(day <= 45){
+      return {
+        name:"PHASE2",
+        label:"Skill Sprint",
+        objective:"Produce daily output, run weekly outreach, and build portfolio proof.",
+        action:(d)=>`Produce one meaningful skill output today. Publish/store it as proof.`,
+        proof:(d)=>`Paste a proof link (or describe screenshot). Add 2–4 line reflection.`
+      };
+    }
+    if(day <= 75){
+      return {
+        name:"PHASE3",
+        label:"First Money Protocol",
+        objective:"Convert output into income through offer refinement and delivery system.",
+        action:(d)=>`Refine offer/pricing OR deliver a client task OR run outreach + follow-up.`,
+        proof:(d)=>`Evidence of outreach/delivery/pricing update + short reflection.`
+      };
+    }
+    return {
+      name:"PHASE4",
+      label:"System Builder",
+      objective:"Turn your process into a repeatable income system blueprint.",
+      action:(d)=>`Document your system: offer → workflow → lead source → delivery → review cycle.`,
+      proof:(d)=>`System notes + one improvement you’ll implement tomorrow.`
+    };
+  }
+
+  const curriculum = buildCurriculum();
+
+  function defaultState(){
+    return {
+      meta: {
+        name:"",
+        startDate:"",
+      },
+      dayNumber: 1,
+      days: curriculum.map(d => ({
+        done:false,
+        action:d.defaultAction,
+        proof:d.defaultProof,
+        reflection:"",
+        updatedAt:null
+      })),
+      outreach: Array.from({length:13}, ()=>({ text:"" })), // weeks 1..13
+      portfolioLinks: "",
+      income: { earned:false, amount:"", date:"", method:"", proof:"" },
+      review: { wins:"", fixes:"", next:"", updatedAt:null }
+    };
+  }
+
+  function loadState(){
+    try{
+      const raw = localStorage.getItem(KEY);
+      if(!raw) return defaultState();
+      const data = JSON.parse(raw);
+
+      // Safety upgrades if fields missing
+      if(!data.days || data.days.length !== 90) return defaultState();
+      if(!data.outreach || data.outreach.length !== 13) data.outreach = Array.from({length:13}, ()=>({text:""}));
+      if(!data.income) data.income = { earned:false, amount:"", date:"", method:"", proof:"" };
+      if(!data.review) data.review = { wins:"", fixes:"", next:"", updatedAt:null };
+      if(!data.meta) data.meta = { name:"", startDate:"" };
+
+      return data;
+    }catch(e){
+      return defaultState();
+    }
+  }
+
+  function saveState(s){
+    localStorage.setItem(KEY, JSON.stringify(s));
+  }
+
+  function toast(){
+    const t = document.getElementById("toast");
+    if(!t) return;
+    t.style.display = "block";
+    setTimeout(()=>t.style.display="none", 2400);
+  }
+
+  // =========================
+  // Helpers
+  // =========================
+  function $(id){ return document.getElementById(id); }
+  function clamp(n,min,max){ return Math.max(min, Math.min(max, n)); }
+
+  function completedCount(state){
+    return state.days.filter(d => d.done).length;
+  }
+
+  function currentDayFromStartDate(state){
+    const sd = state.meta.startDate;
+    if(!sd) return null;
+    const start = new Date(sd + "T00:00:00");
+    const now = new Date();
+    const diffMs = now - start;
+    const diffDays = Math.floor(diffMs / (24*60*60*1000)) + 1;
+    if(isNaN(diffDays)) return null;
+    return clamp(diffDays, 1, 90);
+  }
+
+  function dayPhaseLabel(day){
+    const p = getPhase(day);
+    return p.label;
+  }
+
+  function setActiveTab(tab){
+    document.querySelectorAll(".tabBtn").forEach(b=>b.classList.remove("active"));
+    document.querySelector(`.tabBtn[data-tab="${tab}"]`)?.classList.add("active");
+    document.querySelectorAll(".panel").forEach(p=>p.style.display="none");
+    document.getElementById("panel-" + tab).style.display = "block";
+  }
+
+  // =========================
+  // Render: Overview
+  // =========================
+  function renderOverview(state){
+    const day = clamp(parseInt(state.dayNumber||1,10),1,90);
+    $("statDay").textContent = `Day ${day}`;
+    $("statPhase").textContent = dayPhaseLabel(day);
+
+    // streak = consecutive done ending yesterday/today
+    let streak = 0;
+    for(let i=day-1;i>=0;i--){
+      if(state.days[i].done) streak++;
+      else break;
+    }
+    $("statStreak").textContent = String(streak);
+
+    $("statProof").textContent = String(completedCount(state));
+
+    const done = completedCount(state);
+    $("progressText").textContent = `${done} / 90 complete`;
+    const pct = Math.round((done/90)*100);
+    $("progressBar").style.width = pct + "%";
+
+    const phase = getPhase(day);
+    $("nextStepText").textContent = `Today: ${phase.label}. Open Daily Execution and submit proof for Day ${day}.`;
+  }
+
+  function renderRoadmap(state){
+    const day = clamp(parseInt(state.dayNumber||1,10),1,90);
+
+    const b1 = $("phaseBadge1");
+    const b2 = $("phaseBadge2");
+    const b3 = $("phaseBadge3");
+    const b4 = $("phaseBadge4");
+
+    function setBadge(el, status){
+      el.className = "badge";
+      if(status === "ACTIVE"){ el.classList.add("active"); el.textContent = "Active"; }
+      if(status === "LOCKED"){ el.classList.add("lock"); el.textContent = "Locked"; }
+      if(status === "DONE"){ el.classList.add("ok"); el.textContent = "Completed"; }
+    }
+
+    // completion logic by day number (phase windows)
+    const p1done = state.days.slice(0,14).every(d=>d.done);
+    const p2done = state.days.slice(14,45).every(d=>d.done);
+    const p3done = state.days.slice(45,75).every(d=>d.done);
+
+    if(day <= 14) { setBadge(b1, "ACTIVE"); setBadge(b2, "LOCKED"); setBadge(b3, "LOCKED"); setBadge(b4, "LOCKED"); }
+    else if(day <= 45) { setBadge(b1, p1done?"DONE":"DONE"); setBadge(b2, "ACTIVE"); setBadge(b3, "LOCKED"); setBadge(b4, "LOCKED"); }
+    else if(day <= 75) { setBadge(b1,"DONE"); setBadge(b2, p2done?"DONE":"DONE"); setBadge(b3,"ACTIVE"); setBadge(b4,"LOCKED"); }
+    else { setBadge(b1,"DONE"); setBadge(b2,"DONE"); setBadge(b3, p3done?"DONE":"DONE"); setBadge(b4,"ACTIVE"); }
+  }
+
+  // =========================
+  // Render: Daily
+  // =========================
+  function initDaySelect(){
+    const sel = $("daySelect");
+    sel.innerHTML = "";
+    curriculum.forEach(d=>{
+      const opt = document.createElement("option");
+      opt.value = String(d.day);
+      opt.textContent = d.title;
+      sel.appendChild(opt);
+    });
+  }
+
+  function renderDay(state, day){
+    day = clamp(parseInt(day,10),1,90);
+    const meta = curriculum[day-1];
+    const sday = state.days[day-1];
+
+    $("dailyTitle").textContent = meta.title;
+    $("dailyObjective").textContent = meta.objective;
+    $("dailyPhase").textContent = meta.phase.replace("PHASE","Phase ");
+
+    // Ensure defaults exist
+    if(!sday.action) sday.action = meta.defaultAction;
+    if(!sday.proof) sday.proof = meta.defaultProof;
+
+    $("dailyAction").value = sday.action;
+    $("dailyProof").value = sday.proof;
+    $("dailyReflection").value = sday.reflection || "";
+    $("dailyDone").checked = !!sday.done;
+
+    $("dailyProgressPill").innerHTML = `<span class="dot"></span> ${completedCount(state)} / 90 complete`;
+  }
+
+  function persistDay(state, day){
+    day = clamp(parseInt(day,10),1,90);
+    const sday = state.days[day-1];
+    sday.action = $("dailyAction").value;
+    sday.proof = $("dailyProof").value;
+    sday.reflection = $("dailyReflection").value;
+    sday.done = $("dailyDone").checked;
+    sday.updatedAt = Date.now();
+    saveState(state);
+    toast();
+  }
+
+  // =========================
+  // Proof Vault
+  // =========================
+  function renderVault(state){
+    const tbody = $("vaultRows");
+    tbody.innerHTML = "";
+    curriculum.forEach(d=>{
+      const sday = state.days[d.day-1];
+      const tr = document.createElement("tr");
+      const status = sday.done ? "Completed" : "Pending";
+      const preview = (sday.proof || "").replace(/\s+/g," ").trim().slice(0,70);
+      tr.innerHTML = `
+        <td>Day ${d.day}</td>
+        <td>${dayPhaseLabel(d.day)}</td>
+        <td>${status}</td>
+        <td>${preview ? `<code>${escapeHtml(preview)}${(sday.proof||"").length>70?"…":""}</code>` : "—"}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  function escapeHtml(s){
+    return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+  }
+
+  // =========================
+  // Outreach
+  // =========================
+  function initWeekSelect(){
+    const sel = $("weekSelect");
+    sel.innerHTML = "";
+    for(let w=1; w<=13; w++){
+      const opt = document.createElement("option");
+      opt.value = String(w);
+      opt.textContent = `Week ${w}`;
+      sel.appendChild(opt);
+    }
+  }
+
+  function renderOutreach(state, week){
+    week = clamp(parseInt(week,10),1,13);
+    $("weekTitle").textContent = `Week ${week}`;
+    const text = state.outreach[week-1]?.text || "";
+    $("outreachEntry").value = text;
+
+    const attempts = text.split("\n").map(x=>x.trim()).filter(Boolean).length;
+    $("weekCount").textContent = `${attempts} attempts`;
+  }
+
+  function saveOutreach(state, week){
+    week = clamp(parseInt(week,10),1,13);
+    state.outreach[week-1] = { text: $("outreachEntry").value };
+    saveState(state);
+    toast();
+    renderOutreach(state, week);
+  }
+
+  // =========================
+  // Portfolio
+  // =========================
+  function renderPortfolio(state){
+    $("portfolioLinks").value = state.portfolioLinks || "";
+    const count = (state.portfolioLinks || "").split("\n").map(x=>x.trim()).filter(Boolean).length;
+    $("portfolioCount").textContent = `${count} links`;
+  }
+
+  function savePortfolio(state){
+    state.portfolioLinks = $("portfolioLinks").value;
+    saveState(state);
+    toast();
+    renderPortfolio(state);
+  }
+
+  // =========================
+  // Income
+  // =========================
+  function renderIncome(state){
+    const inc = state.income;
+    $("incomeAmount").value = inc.amount || "";
+    $("incomeDate").value = inc.date || "";
+    $("incomeMethod").value = inc.method || "";
+    $("incomeProof").value = inc.proof || "";
+    $("incomeEarned").checked = !!inc.earned;
+
+    if(inc.earned){
+      $("incomeStatus").textContent = "Status: First Income Earned ✅";
+      $("incomeBadge").className = "badge ok";
+      $("incomeBadge").textContent = "Verified (local)";
+    } else {
+      $("incomeStatus").textContent = "Status: Not Earned Yet";
+      $("incomeBadge").className = "badge";
+      $("incomeBadge").textContent = "Milestone";
+    }
+  }
+
+  function saveIncome(state){
+    state.income = {
+      earned: $("incomeEarned").checked,
+      amount: $("incomeAmount").value,
+      date: $("incomeDate").value,
+      method: $("incomeMethod").value,
+      proof: $("incomeProof").value
+    };
+    saveState(state);
+    toast();
+    renderIncome(state);
+  }
+
+  // =========================
+  // Review
+  // =========================
+  function renderReview(state){
+    $("reviewWins").value = state.review.wins || "";
+    $("reviewFixes").value = state.review.fixes || "";
+    $("reviewNext").value = state.review.next || "";
+    $("reviewStatus").textContent = state.review.updatedAt ? "Saved" : "Draft";
+  }
+
+  function saveReview(state){
+    state.review.wins = $("reviewWins").value;
+    state.review.fixes = $("reviewFixes").value;
+    state.review.next = $("reviewNext").value;
+    state.review.updatedAt = Date.now();
+    saveState(state);
+    toast();
+    renderReview(state);
+  }
+
+  // =========================
+  // Submission placeholders
+  // =========================
+  function copyTodayProof(state, day){
+    day = clamp(parseInt(day,10),1,90);
+    const meta = curriculum[day-1];
+    const sday = state.days[day-1];
+
+    const msg =
+`INCOME STREAMS LAB (ISL-90) — Daily Proof
+
+Name: ${state.meta.name || "—"}
+Day: ${day}
+Phase: ${dayPhaseLabel(day)}
+
+Action:
+${(sday.action || "").trim()}
+
+Proof:
+${(sday.proof || "").trim()}
+
+Reflection:
+${(sday.reflection || "").trim()}
+
+Status: ${sday.done ? "COMPLETED" : "PENDING"}`;
+
+    return navigator.clipboard.writeText(msg);
+  }
+
+  function copyWeeklyReview(state){
+    const msg =
+`INCOME STREAMS LAB (ISL-90) — Weekly Review
+
+Name: ${state.meta.name || "—"}
+
+Wins:
+${(state.review.wins || "").trim()}
+
+Corrections:
+${(state.review.fixes || "").trim()}
+
+Next Week Focus:
+${(state.review.next || "").trim()}`;
+    return navigator.clipboard.writeText(msg);
+  }
+
+  // =========================
+  // Init + Bind
+  // =========================
+  let state = loadState();
+
+  // Meta fields
+  $("learnerName").value = state.meta.name || "";
+  $("startDate").value = state.meta.startDate || "";
+
+  // Day number: auto from start date if set
+  const autoDay = currentDayFromStartDate(state);
+  if(autoDay) state.dayNumber = autoDay;
+
+  $("dayNumber").value = String(state.dayNumber || 1);
+
+  $("learnerName").addEventListener("input", ()=>{
+    state.meta.name = $("learnerName").value;
+    saveState(state);
+  });
+
+  $("startDate").addEventListener("change", ()=>{
+    state.meta.startDate = $("startDate").value;
+    const d = currentDayFromStartDate(state);
+    if(d){
+      state.dayNumber = d;
+      $("dayNumber").value = String(d);
+    }
+    saveState(state);
+    renderOverview(state);
+    renderRoadmap(state);
+  });
+
+  $("dayNumber").addEventListener("input", ()=>{
+    const v = clamp(parseInt($("dayNumber").value||"1",10),1,90);
+    state.dayNumber = v;
+    saveState(state);
+    renderOverview(state);
+    renderRoadmap(state);
+  });
+
+  // Tabs
+  $("tabs").addEventListener("click", (e)=>{
+    const btn = e.target.closest(".tabBtn");
+    if(!btn) return;
+    const tab = btn.getAttribute("data-tab");
+    setActiveTab(tab);
+
+    // tab render hooks
+    if(tab === "overview") renderOverview(state);
+    if(tab === "roadmap") renderRoadmap(state);
+    if(tab === "daily"){
+      $("daySelect").value = String(state.dayNumber || 1);
+      renderDay(state, $("daySelect").value);
+    }
+    if(tab === "vault") renderVault(state);
+    if(tab === "outreach"){
+      $("weekSelect").value = String(getWeekFromDay(state.dayNumber || 1));
+      renderOutreach(state, $("weekSelect").value);
+    }
+    if(tab === "portfolio") renderPortfolio(state);
+    if(tab === "income") renderIncome(state);
+    if(tab === "accountability") renderReview(state);
+  });
+
+  function getWeekFromDay(day){
+    day = clamp(parseInt(day,10),1,90);
+    return clamp(Math.ceil(day/7),1,13);
+  }
+
+  // Overview quick nav
+  $("goDailyBtn").addEventListener("click", ()=>{
+    setActiveTab("daily");
+    $("daySelect").value = String(state.dayNumber || 1);
+    renderDay(state, $("daySelect").value);
+  });
+  $("goRoadmapBtn").addEventListener("click", ()=>{
+    setActiveTab("roadmap");
+    renderRoadmap(state);
+  });
+
+  // Daily bindings
+  initDaySelect();
+
+  $("daySelect").addEventListener("change", ()=>{
+    renderDay(state, $("daySelect").value);
+  });
+
+  $("saveDayBtn").addEventListener("click", ()=>{
+    const day = $("daySelect").value;
+    persistDay(state, day);
+    renderOverview(state);
+  });
+
+  $("goNextDayBtn").addEventListener("click", ()=>{
+    const day = clamp(parseInt($("daySelect").value,10),1,90);
+    persistDay(state, day);
+    // Move to next day
+    const next = clamp(day+1,1,90);
+    state.dayNumber = next;
+    $("dayNumber").value = String(next);
+    saveState(state);
+    $("daySelect").value = String(next);
+    renderDay(state, next);
+    renderOverview(state);
+    renderRoadmap(state);
+  });
+
+  $("copyProofBtn").addEventListener("click", async ()=>{
+    try{
+      await copyTodayProof(state, $("daySelect").value);
+      alert("Copied. Paste to WhatsApp / your proof form.");
+    }catch(e){
+      alert("Copy failed. You can manually select and copy your proof text.");
+    }
+  });
+
+  $("submitBtn").addEventListener("click", (e)=>{
+    e.preventDefault();
+    alert("Submission will be enabled when you attach a private proof form link. For now: copy proof or screenshot and submit manually.");
+  });
+
+  // Vault render on demand (also initial)
+  renderVault(state);
+
+  // Outreach bindings
+  initWeekSelect();
+  $("weekSelect").addEventListener("change", ()=>{
+    renderOutreach(state, $("weekSelect").value);
+  });
+  $("saveOutreachBtn").addEventListener("click", ()=>{
+    saveOutreach(state, $("weekSelect").value);
+  });
+  $("clearOutreachBtn").addEventListener("click", ()=>{
+    if(confirm("Clear this week’s outreach log?")){
+      $("outreachEntry").value = "";
+      saveOutreach(state, $("weekSelect").value);
+    }
+  });
+
+  // Portfolio bindings
+  $("savePortfolioBtn").addEventListener("click", ()=>savePortfolio(state));
+  $("clearPortfolioBtn").addEventListener("click", ()=>{
+    if(confirm("Clear portfolio links?")){
+      $("portfolioLinks").value = "";
+      savePortfolio(state);
+    }
+  });
+
+  // Income bindings
+  $("saveIncomeBtn").addEventListener("click", ()=>saveIncome(state));
+  $("clearIncomeBtn").addEventListener("click", ()=>{
+    if(confirm("Clear income milestone?")){
+      $("incomeAmount").value = "";
+      $("incomeDate").value = "";
+      $("incomeMethod").value = "";
+      $("incomeProof").value = "";
+      $("incomeEarned").checked = false;
+      saveIncome(state);
+    }
+  });
+
+  // Review bindings
+  $("saveReviewBtn").addEventListener("click", ()=>saveReview(state));
+  $("copyReviewBtn").addEventListener("click", async ()=>{
+    try{
+      await copyWeeklyReview(state);
+      alert("Copied. Paste to WhatsApp / your proof form.");
+    }catch(e){
+      alert("Copy failed.");
+    }
+  });
+
+  // Export / Reset
+  $("exportBtn").addEventListener("click", ()=>{
+    const blob = new Blob([JSON.stringify(state, null, 2)], {type:"application/json"});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "isl-dashboard-export.json";
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+
+  $("resetBtn").addEventListener("click", ()=>{
+    if(confirm("Reset all ISL progress on THIS device?")){
+      localStorage.removeItem(KEY);
+      location.reload();
+    }
+  });
+
+  // Initial renders
+  renderOverview(state);
+  renderRoadmap(state);
+
+  // Set outreach default week based on current day
+  $("weekSelect").value = String(getWeekFromDay(state.dayNumber || 1));
+  renderOutreach(state, $("weekSelect").value);
+
+  // Portfolio / income / review initial (not shown until tab, but keep ready)
+  renderPortfolio(state);
+  renderIncome(state);
+  renderReview(state);
+</script>
+</body>
+</html>
