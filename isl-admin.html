@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <meta name="theme-color" content="#070A0F"/>
+  <title>ISL Admin Console</title>
+  <meta name="robots" content="noindex,nofollow"/>
+
+  <style>
+    :root{
+      --bg:#070A0F; --panel:#0C111B; --text:#E9EEF7; --muted:#A9B6CC;
+      --line:rgba(255,255,255,.12); --accent:#22C55E; --gold:#D4AF37;
+      --radius:18px; --shadow:0 18px 40px rgba(0,0,0,.45);
+      --max:920px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      background:var(--bg);
+      color:var(--text);
+      line-height:1.6;
+    }
+    .wrap{max-width:var(--max);margin:0 auto;padding:18px}
+    .card{
+      background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:16px;
+      margin:12px 0;
+    }
+    h1,h2{margin:0 0 10px}
+    .muted{color:var(--muted)}
+    label{display:block;font-weight:900;font-size:12px;color:rgba(233,238,247,.78);margin-top:10px}
+    input,select{
+      width:100%;padding:12px 12px;border-radius:14px;border:1px solid var(--line);
+      background:rgba(12,17,27,.65);color:var(--text);font-family:inherit;font-weight:800;
+      margin-top:6px;outline:none;
+    }
+    .row{display:flex;gap:10px;flex-wrap:wrap}
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;gap:10px;
+      padding:12px 14px;border-radius:999px;
+      border:1px solid rgba(34,197,94,.45);
+      background:rgba(34,197,94,.12);
+      color:var(--text);font-weight:900;
+      cursor:pointer;
+    }
+    .btn:hover{background:rgba(34,197,94,.18)}
+    .btn.gold{border:1px solid rgba(212,175,55,.55);background:rgba(212,175,55,.12)}
+    .btn.gold:hover{background:rgba(212,175,55,.18)}
+    .btn.secondary{border:1px solid var(--line);background:transparent}
+    .btn.secondary:hover{border-color:rgba(212,175,55,.35)}
+    .pill{display:inline-block;padding:8px 10px;border-radius:999px;border:1px solid var(--line);background:rgba(12,17,27,.55);font-weight:900;font-size:12px;color:var(--muted)}
+    table{width:100%;border-collapse:collapse}
+    th,td{border-bottom:1px solid var(--line);padding:10px;text-align:left;font-size:13px}
+    th{font-size:12px;color:rgba(233,238,247,.65)}
+    code{border:1px solid var(--line);background:rgba(12,17,27,.65);padding:2px 8px;border-radius:999px}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <div class="card">
+    <h1>ISL Admin Console</h1>
+    <p class="muted">
+      Generate per-person ISL keys. Stored on <b>this device only</b>. Phase 1 (static).
+    </p>
+    <div class="row">
+      <a class="btn secondary" href="index.html">← ISL Home</a>
+      <a class="btn secondary" href="members.html" target="_blank" rel="noopener">Open Members Door</a>
+      <a class="btn secondary" href="isl-dashboard.html" target="_blank" rel="noopener">Open Dashboard</a>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Generate Key</h2>
+
+    <label for="name">Member Name (WhatsApp name)</label>
+    <input id="name" placeholder="e.g., Aisha O." />
+
+    <div class="row">
+      <div style="flex:1;min-width:220px">
+        <label for="tier">Assign Track</label>
+        <select id="tier">
+          <option value="ISL-90">ISL-90 (90 Days)</option>
+          <option value="ISL-7">7-Day Proof Sprint</option>
+        </select>
+      </div>
+      <div style="flex:1;min-width:220px">
+        <label for="expiry">Expiry (optional)</label>
+        <select id="expiry">
+          <option value="none">No expiry</option>
+          <option value="7">7 days</option>
+          <option value="30">30 days</option>
+          <option value="120">120 days</option>
+          <option value="365">365 days</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="row" style="margin-top:12px">
+      <button class="btn gold" id="genBtn" type="button">Generate Key</button>
+      <button class="btn secondary" id="clearBtn" type="button">Clear Admin Keys (this device)</button>
+    </div>
+
+    <div style="margin-top:12px">
+      <span class="pill">Latest key</span>
+      <div id="latest" style="margin-top:8px;font-weight:1000;font-size:18px;color:var(--gold)">—</div>
+      <p class="muted" id="latestMeta" style="margin-top:6px"></p>
+      <button class="btn" id="copyBtn" style="display:none" type="button">Copy WhatsApp Access Message</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Issued Keys (this device)</h2>
+    <div style="overflow:auto">
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Track</th>
+            <th>Key</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+    <p class="muted">
+      Phase 2: these will be stored in a real database so you can manage from any phone.
+    </p>
+  </div>
+</div>
+
+<script>
+  const LIST_KEY = "ISL_KEYS_V1";
+  const membersDoor = "https://charlesarin101.github.io/Income_streams_lab/members.html";
+
+  function load(){
+    try{ return JSON.parse(localStorage.getItem(LIST_KEY) || "[]"); }
+    catch(e){ return []; }
+  }
+  function save(list){ localStorage.setItem(LIST_KEY, JSON.stringify(list)); }
+
+  function part(){ return Math.random().toString(36).slice(2,6).toUpperCase(); }
+  function makeKey(){
+    // matches members.html validator: ISL-XXXX-XXXX-#### 
+    return "ISL-" + part() + "-" + part() + "-" + String(Date.now()).slice(-4);
+  }
+
+  function escapeHtml(s){
+    return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+  }
+
+  function render(){
+    const list = load();
+    const rows = document.getElementById("rows");
+    rows.innerHTML = "";
+    list.slice().reverse().forEach(item=>{
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${escapeHtml(item.name || "—")}</td>
+        <td>${escapeHtml(item.tier || "ISL-90")}</td>
+        <td><code>${escapeHtml(item.key)}</code></td>
+        <td>${item.revoked ? "Revoked" : (item.expiresAt && Date.now() > item.expiresAt ? "Expired" : "Active")}</td>
+      `;
+      rows.appendChild(tr);
+    });
+  }
+
+  let latestKey = null;
+
+  document.getElementById("genBtn").addEventListener("click", ()=>{
+    const name = document.getElementById("name").value.trim();
+    const tier = document.getElementById("tier").value;
+    const expiry = document.getElementById("expiry").value;
+
+    const key = makeKey();
+    const createdAt = Date.now();
+    const expiresAt = expiry === "none" ? null : createdAt + (parseInt(expiry,10) * 24 * 60 * 60 * 1000);
+
+    const list = load();
+    list.push({ name, tier, key, createdAt, expiresAt, revoked:false });
+    save(list);
+
+    latestKey = { name, tier, key, expiresAt };
+    document.getElementById("latest").textContent = key;
+    document.getElementById("latestMeta").textContent =
+      `${name ? "For: " + name + " · " : ""}Track: ${tier}${expiresAt ? " · Expires: " + new Date(expiresAt).toLocaleDateString() : ""}`;
+
+    document.getElementById("copyBtn").style.display = "inline-flex";
+    render();
+  });
+
+  document.getElementById("copyBtn").addEventListener("click", async ()=>{
+    if(!latestKey) return;
+    const msg =
+`Income Stack Lab (ISL) — Access Approved ✅
+
+Name: ${latestKey.name || "—"}
+Track: ${latestKey.tier}
+
+Your ISL Key: ${latestKey.key}
+
+Next:
+1) Open the Grand Plaza app
+2) Tap: Income Streams Lab → Members Door
+3) Paste your key exactly (case-sensitive) and enter.
+
+Members Door:
+${membersDoor}
+
+— Charles Arin`;
+    try{
+      await navigator.clipboard.writeText(msg);
+      alert("Copied. Paste into WhatsApp now.");
+    }catch(e){
+      alert("Copy failed. Please copy manually.");
+    }
+  });
+
+  document.getElementById("clearBtn").addEventListener("click", ()=>{
+    if(confirm("Clear all ISL keys stored on this device?")){
+      localStorage.removeItem(LIST_KEY);
+      latestKey = null;
+      document.getElementById("latest").textContent = "—";
+      document.getElementById("latestMeta").textContent = "";
+      document.getElementById("copyBtn").style.display = "none";
+      render();
+    }
+  });
+
+  render();
+</script>
+</body>
+</html>
