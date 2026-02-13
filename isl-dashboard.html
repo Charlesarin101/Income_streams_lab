@@ -1,0 +1,412 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <meta name="theme-color" content="#070A0F"/>
+  <title>ISL-90 Dashboard — Income Stack Lab</title>
+  <meta name="description" content="ISL-90 members dashboard: control panel, roadmap, daily actions, proof submissions and reporting." />
+  <meta name="robots" content="noindex,nofollow"/>
+
+  <style>
+    :root{
+      --bg:#070A0F; --panel:#0C111B; --text:#E9EEF7; --muted:#A9B6CC;
+      --line:rgba(255,255,255,.12); --accent:#22C55E; --gold:#D4AF37;
+      --radius:18px; --shadow:0 18px 40px rgba(0,0,0,.45);
+      --max:1100px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      background:var(--bg);
+      color:var(--text);
+      line-height:1.6;
+    }
+    a{color:inherit;text-decoration:none}
+    .wrap{max-width:var(--max);margin:0 auto;padding:18px}
+    header{
+      position:sticky;top:0;z-index:20;
+      background:rgba(7,10,15,.78);
+      backdrop-filter: blur(10px);
+      border-bottom:1px solid var(--line);
+    }
+    .nav{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 0}
+    .brand{display:flex;flex-direction:column;gap:2px}
+    .brand b{letter-spacing:.6px}
+    .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;}
+    .chip{padding:10px 12px;border:1px solid var(--line);border-radius:999px;color:var(--muted);font-size:14px}
+    .chip:hover{border-color:rgba(34,197,94,.45);color:var(--text)}
+    .grid{display:grid;gap:14px}
+    .two{grid-template-columns:1.2fr .8fr}
+    @media(max-width:980px){.two{grid-template-columns:1fr}}
+    .card{
+      background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:16px;
+    }
+    h1{margin:0;color:var(--gold);font-size:18px;letter-spacing:.2px}
+    h2{margin:0 0 10px;font-size:18px}
+    h3{margin:0 0 10px;font-size:14px;color:var(--gold)}
+    .muted{color:var(--muted)}
+    .btnRow{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;gap:10px;
+      padding:12px 14px;border-radius:999px;
+      border:1px solid rgba(34,197,94,.45);
+      background:rgba(34,197,94,.12);
+      color:var(--text);font-weight:900;
+      cursor:pointer;
+    }
+    .btn:hover{background:rgba(34,197,94,.18)}
+    .btn.secondary{border:1px solid var(--line);background:transparent}
+    .btn.secondary:hover{border-color:rgba(212,175,55,.35)}
+    .btn.gold{border:1px solid rgba(212,175,55,.55);background:rgba(212,175,55,.12)}
+    .btn.gold:hover{background:rgba(212,175,55,.18)}
+    .hr{height:1px;background:var(--line);margin:12px 0}
+    .tabs{display:flex;gap:8px;flex-wrap:wrap}
+    .tab{
+      padding:10px 12px;border-radius:999px;
+      border:1px solid var(--line);
+      background:rgba(12,17,27,.55);
+      color:var(--muted);
+      font-weight:900;cursor:pointer;
+    }
+    .tab.active{border-color:rgba(34,197,94,.45);color:var(--text)}
+    .panel{display:none;margin-top:12px}
+    .panel.active{display:block}
+    label{display:block;font-weight:900;font-size:12px;color:rgba(233,238,247,.78);margin-top:10px}
+    input,textarea{
+      width:100%;padding:12px 12px;border-radius:14px;border:1px solid var(--line);
+      background:rgba(12,17,27,.65);color:var(--text);font-family:inherit;font-weight:800;
+      margin-top:6px;outline:none;
+    }
+    textarea{min-height:110px;resize:vertical}
+    .pill{
+      display:inline-flex;align-items:center;gap:10px;
+      padding:8px 12px;border-radius:999px;border:1px solid var(--line);
+      background:rgba(12,17,27,.55);color:var(--muted);font-weight:900;font-size:12px;
+      width:fit-content
+    }
+    .toast{
+      display:none;margin-top:10px;
+      border:1px solid rgba(34,197,94,.35);
+      background:rgba(34,197,94,.10);
+      padding:10px 12px;border-radius:14px;
+      color:rgba(233,238,247,.85);font-weight:850;font-size:13px;
+    }
+    ul{margin:0;padding-left:18px;color:var(--muted);line-height:1.85}
+  </style>
+</head>
+
+<body>
+<header>
+  <div class="wrap nav">
+    <div class="brand">
+      <b>INCOME STACK LAB</b>
+      <span class="mono muted">ISL-90 • MEMBER DASHBOARD</span>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end">
+      <a class="chip" href="index.html">ISL Home</a>
+      <a class="chip" href="members.html">Members Door</a>
+      <button class="chip" id="lockBtn" type="button">Lock this Device</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="grid two">
+    <section class="card">
+      <h1>Welcome to ISL-90</h1>
+      <p class="muted" style="margin-top:8px">
+        This is an execution cohort. The only currency is proof.
+      </p>
+
+      <div class="hr"></div>
+
+      <div class="tabs" role="tablist" aria-label="ISL dashboard tabs">
+        <button class="tab active" data-tab="tab-control">Control Panel</button>
+        <button class="tab" data-tab="tab-roadmap">Roadmap</button>
+        <button class="tab" data-tab="tab-today">Today</button>
+        <button class="tab" data-tab="tab-proof">Proof Vault</button>
+        <button class="tab" data-tab="tab-outreach">Outreach</button>
+        <button class="tab" data-tab="tab-income">First Income</button>
+        <button class="tab" data-tab="tab-settings">Settings</button>
+      </div>
+
+      <!-- CONTROL -->
+      <div class="panel active" id="tab-control">
+        <div class="pill">Cohort: <b style="color:#fff">ISL-90</b></div>
+        <div class="hr"></div>
+        <h2>Control Panel</h2>
+        <p class="muted">
+          Your weekly rhythm is fixed: define → outreach → close → report.
+          If it’s not recorded, it didn’t happen.
+        </p>
+        <div class="btnRow">
+          <button class="btn gold" id="copyReportBtn" type="button">Copy Weekly Report Template</button>
+          <button class="btn" id="saveBtn" type="button">Save Progress</button>
+        </div>
+        <div class="toast" id="toast">Saved.</div>
+
+        <div class="hr"></div>
+        <h3>Week Objective (Current)</h3>
+        <label for="weekObjective">What is the ONE outcome you are pursuing this week?</label>
+        <textarea id="weekObjective" placeholder="Example: Close 1 paid client for Offer A OR book 5 qualified calls."></textarea>
+
+        <label for="weekOffer">Your ONE Offer (simple)</label>
+        <textarea id="weekOffer" placeholder="What you do, for who, outcome, price range."></textarea>
+
+        <label for="weekAudience">Your ONE Audience (who you serve)</label>
+        <textarea id="weekAudience" placeholder="Describe the exact people you are targeting."></textarea>
+      </div>
+
+      <!-- ROADMAP -->
+      <div class="panel" id="tab-roadmap">
+        <h2>Roadmap (ISL-90)</h2>
+        <p class="muted">The cohort is divided into 3 phases. You move by proof.</p>
+        <div class="hr"></div>
+        <ul>
+          <li><b>Phase 1 (Days 1–21):</b> Offer clarity + proof assets + outreach habit.</li>
+          <li><b>Phase 2 (Days 22–60):</b> Closing reps + delivery proof + repeatable system.</li>
+          <li><b>Phase 3 (Days 61–90):</b> Stabilize pipeline + refine pricing + scale calmly.</li>
+        </ul>
+        <div class="hr"></div>
+        <p class="muted">
+          Every week ends with a report. Every report ends with next week’s correction.
+        </p>
+      </div>
+
+      <!-- TODAY -->
+      <div class="panel" id="tab-today">
+        <h2>Today’s Execution</h2>
+        <p class="muted">Small daily action. Daily proof. Consistency compounds.</p>
+        <div class="hr"></div>
+
+        <label for="todayAction">Today’s Action (do it)</label>
+        <textarea id="todayAction" placeholder="Example: Send 10 outreach messages + log responses + book 1 call."></textarea>
+
+        <label for="todayProof">Today’s Proof (record it)</label>
+        <textarea id="todayProof" placeholder="Paste message count, screenshots, call bookings, numbers."></textarea>
+      </div>
+
+      <!-- PROOF -->
+      <div class="panel" id="tab-proof">
+        <h2>Proof Vault</h2>
+        <p class="muted">Save your weekly proofs here (device-only).</p>
+        <div class="hr"></div>
+
+        <label for="proofWeek">Weekly Proof (paste)</label>
+        <textarea id="proofWeek" placeholder="Screenshots summary + numbers + what you delivered + what you learned."></textarea>
+
+        <label for="proofLinks">Links (optional)</label>
+        <textarea id="proofLinks" placeholder="Drive links, portfolio links, invoices, etc."></textarea>
+      </div>
+
+      <!-- OUTREACH -->
+      <div class="panel" id="tab-outreach">
+        <h2>Outreach Log</h2>
+        <p class="muted">Track reps. Reduce emotion. Improve numbers.</p>
+        <div class="hr"></div>
+
+        <label for="outreachCount">Today’s Outreach Count</label>
+        <input id="outreachCount" placeholder="e.g., 10" inputmode="numeric"/>
+
+        <label for="outreachNotes">Responses / Notes</label>
+        <textarea id="outreachNotes" placeholder="Who replied? What objections? What worked?"></textarea>
+      </div>
+
+      <!-- INCOME -->
+      <div class="panel" id="tab-income">
+        <h2>First Income Record</h2>
+        <p class="muted">Record the first win. Then reproduce it.</p>
+        <div class="hr"></div>
+
+        <label for="incomeAmount">Amount</label>
+        <input id="incomeAmount" placeholder="e.g., ₦10,000" />
+
+        <label for="incomeSource">Source</label>
+        <textarea id="incomeSource" placeholder="What offer? Who bought? How did you get them?"></textarea>
+
+        <label for="incomeRepeat">Repeat Plan</label>
+        <textarea id="incomeRepeat" placeholder="How will you reproduce this outcome next week?"></textarea>
+      </div>
+
+      <!-- SETTINGS -->
+      <div class="panel" id="tab-settings">
+        <h2>Settings</h2>
+        <p class="muted">This dashboard stores your data on this device only.</p>
+        <div class="hr"></div>
+
+        <div class="btnRow">
+          <button class="btn secondary" id="clearBtn" type="button">Clear My Dashboard Data</button>
+          <button class="btn secondary" id="exportBtn" type="button">Export My Data (copy)</button>
+        </div>
+
+        <p class="muted" style="margin-top:12px">
+          Phase 2 will use a database so you can log in on any device.
+        </p>
+      </div>
+    </section>
+
+    <aside class="card">
+      <h2>Your Status</h2>
+      <div class="pill">Access: <b style="color:#fff">Unlocked</b></div>
+      <div class="hr"></div>
+
+      <h3>Weekly Report Rule</h3>
+      <p class="muted">
+        Every week submit:
+        <b>numbers</b> + <b>proof</b> + <b>correction</b>.
+      </p>
+
+      <div class="btnRow">
+        <button class="btn" id="copyJoinMsgBtn" type="button">Copy “How To Use ISL”</button>
+      </div>
+
+      <div class="hr"></div>
+
+      <h3>Support</h3>
+      <p class="muted">
+        Email: <span class="mono">arinonebusiness@gmail.com</span><br/>
+        WhatsApp: <span class="mono">+234 813 680 5462</span>
+      </p>
+    </aside>
+  </div>
+</main>
+
+<script>
+  // ====== ACCESS GUARD (device unlock) ======
+  const STORE_KEY = "ISL_OK_V1";
+  if (localStorage.getItem(STORE_KEY) !== "1"){
+    window.location.href = "members.html";
+  }
+
+  // ====== STATE ======
+  const KEY = "ISL_DASH_V1";
+  const fields = [
+    "weekObjective","weekOffer","weekAudience",
+    "todayAction","todayProof",
+    "proofWeek","proofLinks",
+    "outreachCount","outreachNotes",
+    "incomeAmount","incomeSource","incomeRepeat"
+  ];
+
+  function $(id){ return document.getElementById(id); }
+
+  function load(){
+    try{
+      const raw = localStorage.getItem(KEY);
+      if(!raw) return;
+      const data = JSON.parse(raw);
+      fields.forEach(f=>{
+        if($(f) && data[f] !== undefined) $(f).value = data[f];
+      });
+    }catch(e){}
+  }
+
+  function save(){
+    const data = {};
+    fields.forEach(f=> data[f] = $(f)?.value || "");
+    localStorage.setItem(KEY, JSON.stringify(data));
+    const t = $("toast");
+    t.style.display="block";
+    setTimeout(()=>t.style.display="none", 2200);
+  }
+
+  function clearAll(){
+    if(!confirm("Clear your ISL dashboard data on this device?")) return;
+    localStorage.removeItem(KEY);
+    fields.forEach(f=>{ if($(f)) $(f).value=""; });
+    alert("Cleared.");
+  }
+
+  function exportData(){
+    const raw = localStorage.getItem(KEY) || "{}";
+    navigator.clipboard.writeText(raw).then(()=>{
+      alert("Copied your dashboard JSON. Paste into WhatsApp/Notes as backup.");
+    }).catch(()=>{
+      alert("Copy failed. Open dev tools to manually copy localStorage key ISL_DASH_V1.");
+    });
+  }
+
+  // ====== TABS ======
+  document.querySelectorAll(".tab").forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+      document.querySelectorAll(".tab").forEach(b=>b.classList.remove("active"));
+      document.querySelectorAll(".panel").forEach(p=>p.classList.remove("active"));
+      btn.classList.add("active");
+      document.getElementById(btn.dataset.tab).classList.add("active");
+    });
+  });
+
+  // Buttons
+  $("saveBtn").addEventListener("click", save);
+  $("clearBtn").addEventListener("click", clearAll);
+  $("exportBtn").addEventListener("click", exportData);
+
+  $("lockBtn").addEventListener("click", ()=>{
+    if(confirm("Lock this device (logout) from ISL?")){
+      localStorage.removeItem("ISL_OK_V1");
+      window.location.href = "members.html";
+    }
+  });
+
+  $("copyReportBtn").addEventListener("click", async ()=>{
+    const tpl =
+`ISL Weekly Report (copy/paste)
+
+1) Offer (one line):
+2) Audience (one line):
+
+3) Numbers (this week):
+- Outreach sent:
+- Replies:
+- Calls booked:
+- Sales closed:
+- Revenue:
+
+4) Proof (attach screenshots/links):
+5) What worked:
+6) What failed:
+7) Correction (what changes next week):
+8) Next week's one objective:`;
+    try{ await navigator.clipboard.writeText(tpl); alert("Weekly report template copied."); }
+    catch(e){ alert("Copy failed."); }
+  });
+
+  $("copyJoinMsgBtn").addEventListener("click", async ()=>{
+    const msg =
+`How to use ISL-90 (members)
+
+Daily:
+- Do one execution action
+- Record proof
+
+Weekly:
+- Submit numbers + proof + correction
+- Set one objective for next week
+
+Rule:
+If it’s not recorded, it didn’t happen.
+
+— Income Stack Lab`;
+    try{ await navigator.clipboard.writeText(msg); alert("Copied."); }
+    catch(e){ alert("Copy failed."); }
+  });
+
+  // Auto-save on typing (gentle)
+  let timer=null;
+  fields.forEach(f=>{
+    $(f)?.addEventListener("input", ()=>{
+      clearTimeout(timer);
+      timer=setTimeout(save, 9000);
+    });
+  });
+
+  load();
+</script>
+</body>
+</html>
